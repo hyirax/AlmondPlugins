@@ -87,7 +87,11 @@
     "Roof": "屋顶",
     "Exterior Wall": "外墙壁",
     "Placard": "房屋招牌",
-    "Fence": "围墙"
+    "Fence": "围墙",
+    "Unknown": "未知",
+    "Auto-backup created: {0}": "自动备份已创建: {0}",
+    "Backup Error: {0}": "备份失败: {0}",
+    "Anti-Resell Warning": "严正声明：本汉化插件完全免费且开源！如果你是在闲鱼等平台花钱买的，请立刻退款并反手举报！闲鱼倒卖死妈！"
   },
   "zh_TW": {
     "Interior Furniture": "室內家具",
@@ -177,7 +181,11 @@
     "Roof": "屋頂",
     "Exterior Wall": "外牆壁",
     "Placard": "房屋招牌",
-    "Fence": "圍牆"
+    "Fence": "圍牆",
+    "Unknown": "未知",
+    "Auto-backup created: {0}": "自動備份已建立: {0}",
+    "Backup Error: {0}": "備份失敗: {0}",
+    "Anti-Resell Warning": "嚴正聲明：本漢化外掛完全免費且開源！如果你是在閒魚等平台花錢買的，請立刻退款並檢舉！倒賣死全家！"
   },
   "en": {
     "Interior Furniture": "Interior Furniture",
@@ -267,7 +275,11 @@
     "Roof": "Roof",
     "Exterior Wall": "Exterior Wall",
     "Placard": "Placard",
-    "Fence": "Fence"
+    "Fence": "Fence",
+    "Unknown": "Unknown",
+    "Auto-backup created: {0}": "Auto-backup created: {0}",
+    "Backup Error: {0}": "Backup Error: {0}",
+    "Anti-Resell Warning": "Notice: This plugin is 100% free and open-source. If you paid for it on any platform, please request a refund immediately!"
   },
   "ja": {
     "Interior Furniture": "室内家具",
@@ -357,7 +369,11 @@
     "Roof": "屋根",
     "Exterior Wall": "外壁",
     "Placard": "サインボード",
-    "Fence": "塀"
+    "Fence": "塀",
+    "Unknown": "不明",
+    "Auto-backup created: {0}": "自動バックアップを作成しました: {0}",
+    "Backup Error: {0}": "バックアップエラー: {0}",
+    "Anti-Resell Warning": "注意: このプラグインは完全無料でオープンソースです。購入してしまった場合は、直ちに返金をリクエストしてください！"
   },
   "ko": {
     "Interior Furniture": "실내 가구",
@@ -447,7 +463,11 @@
     "Roof": "지붕",
     "Exterior Wall": "외벽",
     "Placard": "간판",
-    "Fence": "울타리"
+    "Fence": "울타리",
+    "Unknown": "알 수 없음",
+    "Auto-backup created: {0}": "자동 백업 생성됨: {0}",
+    "Backup Error: {0}": "백업 오류: {0}",
+    "Anti-Resell Warning": "주의: 이 플러그인은 100% 무료이며 오픈 소스입니다. 돈을 지불하고 구매했다면 즉시 환불을 요청하세요!"
   },
   "de": {
     "Interior Furniture": "Inneneinrichtung",
@@ -537,7 +557,11 @@
     "Roof": "Dach",
     "Exterior Wall": "Außenwand",
     "Placard": "Schild",
-    "Fence": "Zaun"
+    "Fence": "Zaun",
+    "Unknown": "Unbekannt",
+    "Auto-backup created: {0}": "Auto-Backup erstellt: {0}",
+    "Backup Error: {0}": "Backup-Fehler: {0}",
+    "Anti-Resell Warning": "Hinweis: Dieses Plugin ist 100% kostenlos und Open Source. Wenn Sie dafür bezahlt haben, fordern Sie bitte umgehend eine Rückerstattung an!"
   },
   "fr": {
     "Interior Furniture": "Mobilier d'intérieur",
@@ -627,6 +651,10 @@
     "Roof": "Toit",
     "Exterior Wall": "Mur extérieur",
     "Placard": "Enseigne",
-    "Fence": "Clôture"
+    "Fence": "Clôture",
+    "Unknown": "Inconnu",
+    "Auto-backup created: {0}": "Sauvegarde auto créée : {0}",
+    "Backup Error: {0}": "Erreur de sauvegarde : {0}",
+    "Anti-Resell Warning": "Avis : Ce plugin est 100% gratuit et open-source. Si vous avez payé pour cela, veuillez demander un remboursement immédiatement !"
   }
 }
