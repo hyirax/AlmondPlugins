@@ -66,7 +66,8 @@ namespace AlmondHousing
                 DalamudApi.PluginLog.Error(ex, "Error while calling PluginMemory.Dispose()");
             }
 
-            DalamudApi.CommandManager.RemoveHandler("/displace");
+            // 卸载时移除专属指令
+            DalamudApi.CommandManager.RemoveHandler("/almond");
             Gui?.Dispose();
 
         }
@@ -80,9 +81,10 @@ namespace AlmondHousing
 
             Initialize();
 
-            DalamudApi.CommandManager.AddHandler("/displace", new CommandInfo(CommandHandler)
+            // 注册你的专属唤醒指令
+            DalamudApi.CommandManager.AddHandler("/almond", new CommandInfo(CommandHandler)
             {
-                HelpMessage = "打开 DisPlaceCN 房屋装修插件的设置面板。"
+                HelpMessage = "打开 AlmondHousing 杏仁房屋工具设置面板。"
             });
             Gui = new PluginUi(this);
 
@@ -92,7 +94,7 @@ namespace AlmondHousing
             Memory.Instance.SetPlaceAnywhere(true);
             LayoutManager = new SaveLayoutManager(this, Config);
 
-            DalamudApi.PluginLog.Info("DisPlace Plugin v7.3.0 initialized");
+            DalamudApi.PluginLog.Info("AlmondHousing Plugin initialized");
 
             // 读取配置文件中保存的语言，并启动翻译官
             PluginDirectory = pi.AssemblyLocation.DirectoryName;
@@ -635,8 +637,7 @@ namespace AlmondHousing
                 if (item == null) continue;
                 if (item.Equals(0)) continue;
 
-                /* 
-                I could probably do this better if I was fully rested and wanted to do vector math properly but I'm just going to do it the easy way. Drakansoul is very tired.
+                /* I could probably do this better if I was fully rested and wanted to do vector math properly but I'm just going to do it the easy way. Drakansoul is very tired.
                 The plot sizes are slightly variable between wards. Probably a lookup table in the sheets soewhere but I'm just going to eyeball the vaules and call it good enough for now.
                 This is in both the literal and metaphorical sense an edge case and should probably be fine as long as multiple plots aren't trying to put fuyrniture in each other's lawn (which i know you can manage to do in some places but w/e.)
                 */
