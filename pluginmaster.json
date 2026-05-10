@@ -5,7 +5,7 @@
     "InternalName": "AlmondHousing",
     "AssemblyVersion": "7.5.1.0",
     "Punchline": "让房屋装修与跨国分享变得无比简单的多语言深度重制版。",
-    "Description": "由 AlmondCookie 深度重构与独立维护的房屋装修辅助工具。\n\n▶【唤醒指令】：在游戏聊天框输入 /almond  即可打开插件面板。\n\n支持 7 国语言无缝切换、一键导出 Teamcraft/CSV 购物清单、一键分类家具、自动保存和加载房屋家具位置，以及导入/导出 MakePlace 程序的布局文件。",
+    "Description": "由 AlmondCookie 深度重构与独立维护的房屋装修辅助工具。由 AlmondCookie 深度重构与独立维护的房屋装修辅助工具。\n\n▶【唤醒指令】：在游戏聊天框输入 /almond 或 /makeplace 即可打开插件面板。\n\n支持 7 国语言无缝切换、一键导出 Teamcraft/CSV 购物清单、一键分类家具、自动保存和加载房屋家具位置，以及导入/导出 MakePlace 程序的布局文件。\n\n▶【唤醒指令】：在游戏聊天框输入 /almond  即可打开插件面板。\n\n",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/hyirax/AlmondHousing",
     "Tags": [
