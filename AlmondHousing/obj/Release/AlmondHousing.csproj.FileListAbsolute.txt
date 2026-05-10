@@ -1,0 +1,13 @@
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.csproj.AssemblyReference.cache
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.GeneratedMSBuildEditorConfig.editorconfig
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.AssemblyInfoInputs.cache
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.AssemblyInfo.cs
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.csproj.CoreCompileInputs.cache
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.sourcelink.json
+E:\Backup\Documents\GitHub\DisPlace-cn\bin\loc.json
+E:\Backup\Documents\GitHub\DisPlace-cn\bin\AlmondHousing.deps.json
+E:\Backup\Documents\GitHub\DisPlace-cn\bin\AlmondHousing.dll
+E:\Backup\Documents\GitHub\DisPlace-cn\bin\AlmondHousing.pdb
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHo.542989BC.Up2Date
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.dll
+E:\Backup\Documents\GitHub\DisPlace-cn\AlmondHousing\obj\Release\AlmondHousing.pdb
