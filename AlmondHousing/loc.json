@@ -77,7 +77,17 @@
     "None": "无",
     "Search": "搜索",
     "Search furniture name...": "输入家具名称进行搜索...",
-    "Item ID": "物品ID"
+    "Item ID": "物品ID",
+    "Main": "主体",
+    "Wall": "墙壁",
+    "Floor": "地板",
+    "Light": "吊灯",
+    "Window": "窗户",
+    "Door": "门",
+    "Roof": "屋顶",
+    "Exterior Wall": "外墙壁",
+    "Placard": "房屋招牌",
+    "Fence": "围墙"
   },
   "zh_TW": {
     "Interior Furniture": "室內家具",
@@ -157,7 +167,17 @@
     "None": "無",
     "Search": "搜尋",
     "Search furniture name...": "輸入家具名稱進行搜尋...",
-    "Item ID": "物品ID"
+    "Item ID": "物品ID",
+    "Main": "主體",
+    "Wall": "牆壁",
+    "Floor": "地板",
+    "Light": "吊燈",
+    "Window": "窗戶",
+    "Door": "門",
+    "Roof": "屋頂",
+    "Exterior Wall": "外牆壁",
+    "Placard": "房屋招牌",
+    "Fence": "圍牆"
   },
   "en": {
     "Interior Furniture": "Interior Furniture",
@@ -237,7 +257,17 @@
     "None": "None",
     "Search": "Search",
     "Search furniture name...": "Search furniture name...",
-    "Item ID": "Item ID"
+    "Item ID": "Item ID",
+    "Main": "Main",
+    "Wall": "Wall",
+    "Floor": "Floor",
+    "Light": "Light",
+    "Window": "Window",
+    "Door": "Door",
+    "Roof": "Roof",
+    "Exterior Wall": "Exterior Wall",
+    "Placard": "Placard",
+    "Fence": "Fence"
   },
   "ja": {
     "Interior Furniture": "室内家具",
@@ -317,7 +347,17 @@
     "None": "なし",
     "Search": "検索",
     "Search furniture name...": "家具名で検索...",
-    "Item ID": "アイテムID"
+    "Item ID": "アイテムID",
+    "Main": "外装建材",
+    "Wall": "内壁",
+    "Floor": "床",
+    "Light": "照明",
+    "Window": "窓",
+    "Door": "扉",
+    "Roof": "屋根",
+    "Exterior Wall": "外壁",
+    "Placard": "サインボード",
+    "Fence": "塀"
   },
   "ko": {
     "Interior Furniture": "실내 가구",
@@ -397,7 +437,17 @@
     "None": "없음",
     "Search": "검색",
     "Search furniture name...": "가구 이름 검색...",
-    "Item ID": "아이템 ID"
+    "Item ID": "아이템 ID",
+    "Main": "주 건물",
+    "Wall": "내벽",
+    "Floor": "바닥",
+    "Light": "조명",
+    "Window": "창문",
+    "Door": "문",
+    "Roof": "지붕",
+    "Exterior Wall": "외벽",
+    "Placard": "간판",
+    "Fence": "울타리"
   },
   "de": {
     "Interior Furniture": "Inneneinrichtung",
@@ -477,7 +527,17 @@
     "None": "Keine",
     "Search": "Suchen",
     "Search furniture name...": "Möbelname suchen...",
-    "Item ID": "Artikel-ID"
+    "Item ID": "Artikel-ID",
+    "Main": "Hauptgebäude",
+    "Wall": "Innenwand",
+    "Floor": "Boden",
+    "Light": "Beleuchtung",
+    "Window": "Fenster",
+    "Door": "Tür",
+    "Roof": "Dach",
+    "Exterior Wall": "Außenwand",
+    "Placard": "Schild",
+    "Fence": "Zaun"
   },
   "fr": {
     "Interior Furniture": "Mobilier d'intérieur",
@@ -545,7 +605,7 @@
     "Export to CSV": "Exporter en CSV",
     "Copy as CSV format to paste into Excel": "Copier au format CSV pour coller dans Excel",
     "List copied to clipboard! Paste it into Teamcraft.": "Liste copiée ! Veuillez la coller dans Teamcraft.",
-    "CSV copied to clipboard! Paste it into Excel.": "CSV copié ! Veuillez le coller dans Excel.",
+    "CSV copié ! Veuillez le coller dans Excel.": "CSV copié ! Veuillez le coller dans Excel.",
     "Export Language": "Langue d'exportation",
     "English": "Anglais (English)",
     "Japanese": "Japonais (日本語)",
@@ -557,6 +617,16 @@
     "None": "Aucun",
     "Search": "Rechercher",
     "Search furniture name...": "Rechercher un nom de meuble...",
-    "Item ID": "ID d'objet"
+    "Item ID": "ID d'objet",
+    "Main": "Bâtiment principal",
+    "Wall": "Mur intérieur",
+    "Floor": "Sol",
+    "Light": "Éclairage",
+    "Window": "Fenêtre",
+    "Door": "Porte",
+    "Roof": "Toit",
+    "Exterior Wall": "Mur extérieur",
+    "Placard": "Enseigne",
+    "Fence": "Clôture"
   }
 }

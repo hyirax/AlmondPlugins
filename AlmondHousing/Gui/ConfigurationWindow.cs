@@ -526,8 +526,9 @@ namespace AlmondHousing.Gui
 
                 foreach (var fixture in fixtureList)
                 {
-                    ImGui.Text(fixture.level); ImGui.NextColumn();
-                    ImGui.Text(fixture.type); ImGui.NextColumn();
+                    // === 🛠️ 汉化修补点：给底层数据套上翻译官 ===
+                    ImGui.Text(Lang.GetText(fixture.level ?? "")); ImGui.NextColumn();
+                    ImGui.Text(Lang.GetText(fixture.type ?? "")); ImGui.NextColumn();
 
                     if (itemSheet.HasRow(fixture.itemId))
                     {
