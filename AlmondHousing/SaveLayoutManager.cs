@@ -279,7 +279,8 @@ namespace AlmondHousing
             // 如果解密失败或触发防篡改，强制阻断！
             if (jsonString == "ALMOND_DECRYPT_ERROR")
             {
-                throw new Exception("Failed to decrypt layout! The file might be corrupted or tampered with.");
+                // 💡 修复：套上 Lang.GetText
+                throw new Exception(Lang.GetText("Failed to decrypt layout! The file might be corrupted or tampered with."));
             }
 
             var options = new JsonSerializerOptions();
@@ -564,7 +565,8 @@ namespace AlmondHousing
 
             if (Directory.Exists(Config.SaveLocation))
             {
-                throw new Exception("Save file not specified");
+                // 💡 修复：套上 Lang.GetText
+                throw new Exception(Lang.GetText("Save file not specified"));
             }
             Layout save = Plugin.Layout;
             save.playerTransform = new Transform();
@@ -595,8 +597,8 @@ namespace AlmondHousing
             string encryptedResult = ChaChaCryptoHelper.Encrypt(result);
             File.WriteAllText(Config.SaveLocation, encryptedResult);
 
-
-            Log("Finished exporting layout");
+            // 💡 修复：套上 Lang.GetText
+            Log(Lang.GetText("Finished exporting layout"));
         }
 
     }
