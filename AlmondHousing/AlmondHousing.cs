@@ -814,7 +814,7 @@ namespace AlmondHousing
             {
                 if (string.IsNullOrEmpty(args) || args.Equals("config", StringComparison.OrdinalIgnoreCase))
                 {
-                    Gui.ConfigWindow.Visible = !Gui.ConfigWindow.Visible;
+                    Gui.ConfigWindow.IsOpen = !Gui.ConfigWindow.IsOpen;
                 }
             }
             catch (Exception e)

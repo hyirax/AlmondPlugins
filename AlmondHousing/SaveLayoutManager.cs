@@ -272,8 +272,16 @@ namespace AlmondHousing
 
         public static void ImportLayout(string path)
         {
+            // --- 🚀 接入解密引擎：自动识别加密图纸与普通图纸 ---
+            string rawString = File.ReadAllText(path);
+            string jsonString = ChaChaCryptoHelper.Decrypt(rawString);
 
-            string jsonString = File.ReadAllText(path);
+            // 如果解密失败或触发防篡改，强制阻断！
+            if (jsonString == "ALMOND_DECRYPT_ERROR")
+            {
+                throw new Exception("Failed to decrypt layout! The file might be corrupted or tampered with.");
+            }
+
             var options = new JsonSerializerOptions();
             options.Converters.Add(new ObjectToInferredTypesConverter());
 
@@ -583,7 +591,9 @@ namespace AlmondHousing
             string pattern = @"\s+(-?(?:[0-9]*[.])?[0-9]+(?:E-[0-9]+)?,?)\s*(?=\s[-\d\]])";
             string result = Regex.Replace(jsonString, pattern, " $1");
 
-            File.WriteAllText(Config.SaveLocation, result);
+            // --- 🚀 接入加密引擎：输出加密的图纸数据 ---
+            string encryptedResult = ChaChaCryptoHelper.Encrypt(result);
+            File.WriteAllText(Config.SaveLocation, encryptedResult);
 
 
             Log("Finished exporting layout");

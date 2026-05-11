@@ -11,74 +11,86 @@ using System.Numerics;
 using static AlmondHousing.AlmondHousing;
 using Dalamud.Interface.Textures;
 using Dalamud.Interface;
+using Dalamud.Interface.Windowing;
 
 namespace AlmondHousing.Gui
 {
-    public class ConfigurationWindow : Window<AlmondHousing>
+    public class ConfigurationWindow : Window
     {
+        private AlmondHousing Plugin;
         public Configuration Config => Plugin.Config;
+
+        public bool CanUpload { get; set; }
+        public bool CanImport { get; set; }
 
         private string CustomTag = string.Empty;
         private readonly Dictionary<uint, uint> iconToFurniture = new() { };
 
-        // === 🎨 现代感配色 ===
         private readonly Vector4 THEME_BASE = new(0.20f, 0.20f, 0.20f, 1f);     
         private readonly Vector4 THEME_HOVER = new(0.35f, 0.35f, 0.35f, 1f);    
         private readonly Vector4 THEME_ACTIVE = new(0.45f, 0.45f, 0.45f, 1f);   
         private readonly Vector4 THEME_HEADER = new(0.15f, 0.15f, 0.15f, 0.8f);
-        private readonly Vector4 ACCENT_COLOR = new(0.9f, 0.7f, 0.3f, 1.0f); // 杏仁金
+        private readonly Vector4 ACCENT_COLOR = new(0.9f, 0.7f, 0.3f, 1.0f); 
 
         private FileDialogManager FileDialogManager { get; }
         private Dalamud.Game.ClientLanguage currentExportLang = Dalamud.Game.ClientLanguage.English;
         private string searchQuery = string.Empty;
 
-        // === 🧭 导航控制 ===
         private int selectedTab = 0;
 
-        public ConfigurationWindow(AlmondHousing plugin) : base(plugin)
+        public ConfigurationWindow(AlmondHousing plugin) : base("AlmondHousing", ImGuiWindowFlags.NoScrollWithMouse)
         {
+            Plugin = plugin;
+            this.SizeCondition = ImGuiCond.FirstUseEver;
+            this.Size = new Vector2(800, 550);
             this.FileDialogManager = new FileDialogManager
             {
                 AddedWindowFlags = ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking,
             };
         }
 
-        protected void DrawAllUi()
+        public override void PreDraw()
         {
-            if (!ImGui.Begin($"{Plugin.Name}", ref WindowVisible, ImGuiWindowFlags.NoScrollWithMouse))
-            {
-                return;
-            }
+            ImGui.PushStyleColor(ImGuiCol.TitleBgActive, THEME_BASE);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, THEME_HOVER);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, THEME_ACTIVE);
+        }
 
-            // 安全获取插件版本号，并进行简略化处理
+        public override void PostDraw()
+        {
+            ImGui.PopStyleColor(3);
+        }
+
+        public override void Draw()
+        {
             string version = typeof(AlmondHousing).Assembly.GetName().Version?.ToString();
             if (string.IsNullOrEmpty(version)) version = "7.5.1.0";
-            if (version.EndsWith(".0")) version = version.Substring(0, version.Length - 2); // 例如 7.5.1.0 简略为 7.5.1
+            if (version.EndsWith(".0")) version = version.Substring(0, version.Length - 2); 
             
             string versionText = $" v{version}";
             string authorText = " By AlmondCookie";
 
-            // --- 🚀 侧边栏宽度全自动计算 ---
             float maxTextWidth = ImGui.CalcTextSize(Lang.GetText("Home")).X;
             maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Interior Furniture")).X);
             maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Fixtures")).X);
             maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Layout & Export")).X);
             maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Settings")).X);
+            // 🚀 新增 Material Audit 的宽度计算
+            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Material Audit")).X);
             maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(authorText).X);
 
             float sidebarWidth = maxTextWidth + 65f; 
             if (sidebarWidth < 200f) sidebarWidth = 200f; 
 
-            // 1. 左侧：导航面板
             ImGui.BeginChild("AlmondSidebar", new Vector2(sidebarWidth, 0), true);
             {
                 DrawSidebarItem(FontAwesomeIcon.Home, Lang.GetText("Home"), 0);
                 DrawSidebarItem(FontAwesomeIcon.Chair, Lang.GetText("Interior Furniture"), 1); 
                 DrawSidebarItem(FontAwesomeIcon.PaintRoller, Lang.GetText("Fixtures"), 2);               
+                DrawSidebarItem(FontAwesomeIcon.ClipboardList, Lang.GetText("Material Audit"), 5); // 🚀 槽位5：材料盘点
                 DrawSidebarItem(FontAwesomeIcon.FileExport, Lang.GetText("Layout & Export"), 3);        
                 DrawSidebarItem(FontAwesomeIcon.Cog, Lang.GetText("Settings"), 4);               
 
-                // 底部作者信息 (动态防重叠)
                 ImGui.SetCursorPosY(Math.Max(ImGui.GetCursorPosY() + 20, ImGui.GetWindowHeight() - 60));
                 ImGui.Separator();
                 ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1f));
@@ -90,7 +102,6 @@ namespace AlmondHousing.Gui
 
             ImGui.SameLine();
 
-            // 2. 右侧：内容区域
             ImGui.BeginChild("AlmondContent", new Vector2(0, 0), false);
             {
                 switch (selectedTab)
@@ -100,6 +111,7 @@ namespace AlmondHousing.Gui
                     case 2: DrawFixtureTab(); break;
                     case 3: DrawLayoutFileTab(); break;
                     case 4: DrawSettingsTab(); break;
+                    case 5: DrawMaterialTab(); break; // 🚀 渲染新 Tab
                 }
             }
             ImGui.EndChild();
@@ -107,7 +119,6 @@ namespace AlmondHousing.Gui
             this.FileDialogManager.Draw();
         }
 
-        // === 🛠️ 侧边栏渲染函数 (FontAwesome 版) ===
         private void DrawSidebarItem(FontAwesomeIcon icon, string label, int index)
         {
             bool isSelected = selectedTab == index;
@@ -126,7 +137,6 @@ namespace AlmondHousing.Gui
                 ImGui.GetWindowDrawList().AddLine(new Vector2(min.X + 2, min.Y + 4), new Vector2(min.X + 2, max.Y - 4), ImGui.ColorConvertFloat4ToU32(ACCENT_COLOR), 4.0f);
             }
 
-            // 绘制矢量图标
             ImGui.SetCursorPos(new Vector2(startPos.X + 10, startPos.Y + (height - ImGui.GetTextLineHeight()) / 2));
             ImGui.PushFont(UiBuilder.IconFont);
             if (isSelected) ImGui.PushStyleColor(ImGuiCol.Text, ACCENT_COLOR);
@@ -134,7 +144,6 @@ namespace AlmondHousing.Gui
             if (isSelected) ImGui.PopStyleColor();
             ImGui.PopFont();
 
-            // 绘制文字
             if (isSelected) ImGui.PushStyleColor(ImGuiCol.Text, ACCENT_COLOR);
             ImGui.SetCursorPos(new Vector2(startPos.X + 38, startPos.Y + (height - ImGui.GetTextLineHeight()) / 2));
             ImGui.Text(label);
@@ -143,7 +152,6 @@ namespace AlmondHousing.Gui
             ImGui.SetCursorPos(new Vector2(startPos.X, startPos.Y + height + 4));
         }
 
-        // === 🛠️ 辅助：内联图标渲染 (FontAwesome 版) ===
         private void DrawInlineIcon(FontAwesomeIcon icon)
         {
             ImGui.PushFont(UiBuilder.IconFont);
@@ -172,7 +180,6 @@ namespace AlmondHousing.Gui
                 ImGui.BulletText(Lang.GetText("Feat4"));
                 ImGui.Dummy(new Vector2(0, 10));
                 
-                // --- 🚀 完美应用 loc.json 里所有的致敬文案翻译 ---
                 ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Credits & Acknowledgements"));
                 ImGui.TextWrapped(Lang.GetText("CreditDesc"));
                 ImGui.Dummy(new Vector2(0, 5));
@@ -242,38 +249,137 @@ namespace AlmondHousing.Gui
             ImGui.PopStyleColor();
         }
 
+        // ==========================================
+        // 🚀 新功能：材料盘点界面 (Material Audit)
+        // ==========================================
+        private void DrawMaterialTab()
+        {
+            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Inventory Material Audit"));
+            ImGui.Separator();
+            ImGui.TextDisabled(Lang.GetText("Automatically scans Bag and Saddlebags."));
+            ImGui.Dummy(new Vector2(0, 10));
+
+            var materials = AggregateItems(Dalamud.Game.ClientLanguage.English);
+            
+            if (ImGui.BeginTable("MaterialTable", 5, ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg | ImGuiTableFlags.ScrollY))
+            {
+                ImGui.TableSetupColumn(Lang.GetText("Item"), ImGuiTableColumnFlags.WidthStretch);
+                ImGui.TableSetupColumn(Lang.GetText("Needed"), ImGuiTableColumnFlags.WidthFixed, 60f);
+                ImGui.TableSetupColumn(Lang.GetText("Owned"), ImGuiTableColumnFlags.WidthFixed, 60f);
+                ImGui.TableSetupColumn(Lang.GetText("Missing"), ImGuiTableColumnFlags.WidthFixed, 60f);
+                ImGui.TableSetupColumn(Lang.GetText("Dye"), ImGuiTableColumnFlags.WidthFixed, 100f);
+                ImGui.TableHeadersRow();
+
+                var itemSheet = DalamudApi.DataManager.GetExcelSheet<Item>();
+
+                foreach (var mat in materials.Values.OrderByDescending(m => Math.Max(0, m.NeededCount - m.OwnedCount)))
+                {
+                    int missing = Math.Max(0, mat.NeededCount - mat.OwnedCount);
+                    
+                    ImGui.TableNextRow();
+                    ImGui.TableNextColumn();
+                    if (itemSheet.HasRow(mat.ItemId)) { DrawIcon(itemSheet.GetRow(mat.ItemId).Icon, new Vector2(20)); ImGui.SameLine(); }
+                    ImGui.Text(mat.Name);
+                    
+                    ImGui.TableNextColumn(); ImGui.Text($"{mat.NeededCount}");
+                    ImGui.TableNextColumn(); ImGui.TextColored(mat.OwnedCount >= mat.NeededCount ? new Vector4(0.4f, 1f, 0.4f, 1f) : new Vector4(1f, 0.4f, 0.4f, 1f), $"{mat.OwnedCount}");
+                    ImGui.TableNextColumn(); ImGui.TextColored(missing > 0 ? new Vector4(1f, 0.8f, 0.2f, 1f) : new Vector4(0.5f, 0.5f, 0.5f, 1f), missing > 0 ? $"{missing}" : "OK");
+                    ImGui.TableNextColumn(); ImGui.Text(mat.Dye == "" ? "-" : mat.Dye);
+                }
+                ImGui.EndTable();
+            }
+        }
+
         private void DrawLayoutFileTab()
         {
             DrawInlineIcon(FontAwesomeIcon.FolderOpen); ImGui.SameLine();
             ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Layout & Export"));
             ImGui.Separator();
+            ImGui.Dummy(new Vector2(0, 10));
+
+            // --- 第一组：保存功能 ---
+            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Save Layout"));
+            if (!Config.SaveLocation.IsNullOrEmpty())
+            {
+                ImGui.TextWrapped($"{Lang.GetText("Current Path:")} {Config.SaveLocation}");
+                
+                string txtSave = Lang.GetText("Save");
+                float bwSave = Math.Max(120f, ImGui.CalcTextSize(txtSave).X + 40f);
+                if (ImGui.Button(txtSave, new Vector2(bwSave, 30))) SaveLayoutToFile();
+                ImGui.SameLine();
+            }
+            
+            string txtSaveAs = Lang.GetText("Save As");
+            float bwSaveAs = Math.Max(120f, ImGui.CalcTextSize(txtSaveAs).X + 40f);
+            if (ImGui.Button(txtSaveAs, new Vector2(bwSaveAs, 30))) ShowSaveDialog();
+
+            ImGui.Dummy(new Vector2(0, 10));
+            ImGui.Separator();
+            ImGui.Dummy(new Vector2(0, 10));
+
+            // --- 第二组：读取与应用功能 ---
+            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Apply & Load Layout"));
+
+            string btnApplyCurrent = Lang.GetText("Apply Current");
+            string btnApplyFile = Lang.GetText("Apply from File");
+            string btnLoadCurrent = Lang.GetText("Load Current");
+            string btnLoadFile = Lang.GetText("Load from File");
+
+            float bw1 = ImGui.CalcTextSize(btnApplyCurrent).X;
+            float bw2 = ImGui.CalcTextSize(btnApplyFile).X;
+            float bw3 = ImGui.CalcTextSize(btnLoadCurrent).X;
+            float bw4 = ImGui.CalcTextSize(btnLoadFile).X;
+            float buttonWidth = Math.Max(Math.Max(bw1, bw2), Math.Max(bw3, bw4)) + 40f; 
+            buttonWidth = Math.Max(160f, buttonWidth); 
+
+            void DrawHelpText(string text)
+            {
+                ImGui.SameLine();
+                ImGui.PushFont(UiBuilder.IconFont);
+                ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
+                ImGui.PopFont();
+                ImGui.SameLine();
+                ImGui.TextDisabled(text);
+            }
+
+            if (!Config.SaveLocation.IsNullOrEmpty())
+            {
+                if (ImGui.Button(btnApplyCurrent, new Vector2(buttonWidth, 30))) 
+                { 
+                    CreateAutoBackup(); 
+                    LoadLayoutFromFile(true); 
+                }
+                DrawHelpText(Lang.GetText("Read from current path and place immediately"));
+            }
+
+            if (ImGui.Button(btnApplyFile, new Vector2(buttonWidth, 30))) 
+            { 
+                ShowLoadDialog(true); 
+            }
+            DrawHelpText(Lang.GetText("Select a file and start placing immediately"));
+
             ImGui.Dummy(new Vector2(0, 5));
 
             if (!Config.SaveLocation.IsNullOrEmpty())
             {
-                ImGui.TextWrapped($"{Lang.GetText("Current file location:")}\n{Config.SaveLocation}");
-                ImGui.Dummy(new Vector2(0, 5));
-                
-                // 🚀 按钮弹性自适应宽度
-                string saveText = Lang.GetText("Save");
-                if (ImGui.Button(saveText, new Vector2(Math.Max(100, ImGui.CalcTextSize(saveText).X + 40), 30))) SaveLayoutToFile();
-                ImGui.SameLine();
-                
-                string loadText = Lang.GetText("Load");
-                if (ImGui.Button(loadText, new Vector2(Math.Max(100, ImGui.CalcTextSize(loadText).X + 40), 30))) { CreateAutoBackup(); LoadLayoutFromFile(); }
+                if (ImGui.Button(btnLoadCurrent, new Vector2(buttonWidth, 30))) 
+                { 
+                    LoadLayoutFromFile(false); 
+                }
+                DrawHelpText(Lang.GetText("Update list only, do not move furniture"));
             }
 
-            // 🚀 按钮弹性自适应宽度
-            string saveAsText = Lang.GetText("Save As");
-            if (ImGui.Button(saveAsText, new Vector2(Math.Max(100, ImGui.CalcTextSize(saveAsText).X + 40), 30))) ShowSaveDialog();
-            ImGui.SameLine();
-            
-            string loadFromText = Lang.GetText("Load From");
-            if (ImGui.Button(loadFromText, new Vector2(Math.Max(100, ImGui.CalcTextSize(loadFromText).X + 40), 30))) ShowLoadDialog();
+            if (ImGui.Button(btnLoadFile, new Vector2(buttonWidth, 30))) 
+            { 
+                ShowLoadDialog(false); 
+            }
+            DrawHelpText(Lang.GetText("Select file and update list, do not move"));
 
-            ImGui.Dummy(new Vector2(0, 15));
+            ImGui.Dummy(new Vector2(0, 20));
+            
+            // --- 第三组：购物清单导出 ---
             DrawInlineIcon(FontAwesomeIcon.ShoppingCart); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Export Shopping List (导出购物清单)"));
+            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Export Shopping List"));
             ImGui.Separator();
 
             ImGui.SetNextItemWidth(180); 
@@ -300,7 +406,7 @@ namespace AlmondHousing.Gui
             ImGui.Dummy(new Vector2(0, 10));
 
             DrawInlineIcon(FontAwesomeIcon.Globe); ImGui.SameLine();
-            ImGui.Text(Lang.GetText("Plugin Interface Language / 插件语言"));
+            ImGui.Text(Lang.GetText("Plugin Interface Language"));
             
             string[] supportedLangNames = { "简体中文", "繁體中文", "English", "日本語", "한국어", "Deutsch", "Français" };
             string[] supportedLangs = { "zh", "zh_TW", "en", "ja", "ko", "de", "fr" };
@@ -354,17 +460,6 @@ namespace AlmondHousing.Gui
 
         #endregion
 
-        protected override void DrawUi()
-        {
-            ImGui.PushStyleColor(ImGuiCol.TitleBgActive, THEME_BASE);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, THEME_HOVER);
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, THEME_ACTIVE);
-            ImGui.SetNextWindowSize(new Vector2(800, 550), ImGuiCond.FirstUseEver); 
-            DrawAllUi();
-            ImGui.PopStyleColor(3);
-            ImGui.End();
-        }
-
         #region 核心功能逻辑区
 
         public static void DrawIcon(ushort icon, Vector2 size)
@@ -388,17 +483,16 @@ namespace AlmondHousing.Gui
 
         private bool CheckModeForSave() => true;
 
-        private bool CheckModeForLoad()
+        private bool CheckModeForLoad(bool shouldApply)
         {
-            if (Config.ApplyLayout && !Memory.Instance.CanEditItem())
+            if (shouldApply && !Memory.Instance.CanEditItem())
             {
-                LogError(Lang.GetText("Unable to load and apply layouts outside of Rotate Layout mode"));
+                LogError(Lang.GetText("Unable to set position outside of Rotate Layout mode"));
                 return false;
             }
-            if (!Config.ApplyLayout && !Memory.Instance.IsHousingMode())
+            if (!shouldApply && !Memory.Instance.IsHousingMode())
             {
                 LogError(Lang.GetText("Unable to load layouts outside of Layout mode"));
-                LogError(Memory.Instance.GetCurrentTerritory() == Memory.HousingArea.Island ? Lang.GetText("(Manage Furnishings -> Place Furnishing Glamours)") : Lang.GetText("(Housing -> Indoor/Outdoor Furnishings)"));
                 return false;
             }
             return true;
@@ -411,7 +505,7 @@ namespace AlmondHousing.Gui
                 Plugin.GetGameLayout();
                 string backupDir = Path.Combine(AlmondHousing.PluginDirectory, "Backups");
                 if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
-                string backupFileName = $"AutoBackup_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+                string backupFileName = $"AutoBackup_{DateTime.Now:yyyyMMdd_HHmmss}.almond";
                 string backupPath = Path.Combine(backupDir, backupFileName);
                 string originalSaveLocation = Config.SaveLocation;
                 Config.SaveLocation = backupPath;
@@ -425,19 +519,22 @@ namespace AlmondHousing.Gui
         private void ShowSaveDialog()
         {
             string saveName = Config.SaveLocation.IsNullOrEmpty() ? "save" : Path.GetFileNameWithoutExtension(Config.SaveLocation);
-            FileDialogManager.SaveFileDialog(Lang.GetText("Select a Save Location"), ".json", saveName, "json", (bool ok, string res) =>
+            FileDialogManager.SaveFileDialog(Lang.GetText("Select a Save Location"), ".almond", saveName, "almond", (bool ok, string res) =>
             {
                 if (!ok) return;
                 Config.SaveLocation = res; Config.Save(); SaveLayoutToFile();
             }, Path.GetDirectoryName(Config.SaveLocation));
         }
 
-        private void ShowLoadDialog()
+        private void ShowLoadDialog(bool shouldApply)
         {
-            FileDialogManager.OpenFileDialog(Lang.GetText("Select a Layout File"), ".json", (bool ok, List<string> res) =>
+            FileDialogManager.OpenFileDialog(Lang.GetText("Select a Layout File"), ".almond,.json", (bool ok, List<string> res) =>
             {
                 if (!ok) return;
-                CreateAutoBackup(); Config.SaveLocation = res.FirstOrDefault(""); Config.Save(); LoadLayoutFromFile();
+                if (shouldApply) CreateAutoBackup(); 
+                Config.SaveLocation = res.FirstOrDefault(""); 
+                Config.Save(); 
+                LoadLayoutFromFile(shouldApply);
             }, 1, Path.GetDirectoryName(Config.SaveLocation));
         }
 
@@ -447,15 +544,17 @@ namespace AlmondHousing.Gui
             catch (Exception e) { LogError(string.Format(Lang.GetText("Save Error: {0}"), e.Message), e.StackTrace ?? ""); }
         }
 
-        private void LoadLayoutFromFile()
+        private void LoadLayoutFromFile(bool shouldApply)
         {
-            if (!CheckModeForLoad()) return;
+            if (!CheckModeForLoad(shouldApply)) return;
             try { 
                 SaveLayoutManager.ImportLayout(Config.SaveLocation); 
                 Log(string.Format(Lang.GetText("Imported {0} items"), Plugin.InteriorItemList.Count + Plugin.ExteriorItemList.Count));
+                
                 Plugin.MatchLayout(); 
                 Config.ResetRecord(); 
-                if (Config.ApplyLayout) Plugin.ApplyLayout(); 
+                
+                if (shouldApply) Plugin.ApplyLayout(); 
             }
             catch (Exception e) { LogError(string.Format(Lang.GetText("Load Error: {0}"), e.Message), e.StackTrace ?? ""); }
         }
@@ -564,10 +663,9 @@ namespace AlmondHousing.Gui
             }
         }
 
-        protected override void DrawScreen() { if (Config.DrawScreen) DrawItemOnScreen(); }
-
-        private unsafe void DrawItemOnScreen()
+        public unsafe void DrawItemOnScreen()
         {
+            if (!Config.DrawScreen) return;
             if (Memory.Instance == null) return;
             var itemList = Memory.Instance.GetCurrentTerritory() == Memory.HousingArea.Indoors ? Plugin.InteriorItemList : Plugin.ExteriorItemList;
             for (int i = 0; i < itemList.Count(); i++)
@@ -599,38 +697,71 @@ namespace AlmondHousing.Gui
             }
         }
 
-        private void ExportToTeamcraft(Dalamud.Game.ClientLanguage targetLang)
+        // 🚀 修改数据聚合逻辑：调用库存引擎查询玩家背包/仓库数据
+        private Dictionary<string, (uint ItemId, string Name, int NeededCount, int OwnedCount, string Dye)> AggregateItems(Dalamud.Game.ClientLanguage targetLang)
         {
-            var aggregatedItems = AggregateItems(targetLang);
-            if (aggregatedItems.Count == 0) return;
-            string exportText = aggregatedItems.Aggregate("", (current, item) => current + $"{item.Value.Name} x{item.Value.Count}\n");
-            ImGui.SetClipboardText(exportText); Log(Lang.GetText("List copied to clipboard! Paste it into Teamcraft."));
-        }
-
-        private void ExportToCSV(Dalamud.Game.ClientLanguage targetLang)
-        {
-            var aggregatedItems = AggregateItems(targetLang);
-            if (aggregatedItems.Count == 0) return;
-            string exportText = $"{Lang.GetText("Item ID")},{Lang.GetText("Item Name")},{Lang.GetText("Quantity")},{Lang.GetText("Dye/Stain")}\n" + aggregatedItems.Aggregate("", (current, item) => current + $"{item.Value.ItemId},{item.Value.Name},{item.Value.Count},{(item.Value.Dye == "" ? Lang.GetText("None") : item.Value.Dye)}\n");
-            ImGui.SetClipboardText(exportText); Log(Lang.GetText("CSV copied to clipboard! Paste it into Excel."));
-        }
-
-        private Dictionary<string, (uint ItemId, string Name, int Count, string Dye)> AggregateItems(Dalamud.Game.ClientLanguage targetLang)
-        {
-            var results = new Dictionary<string, (uint ItemId, string Name, int Count, string Dye)>();
+            var results = new Dictionary<string, (uint ItemId, string Name, int NeededCount, int OwnedCount, string Dye)>();
             var allItems = Plugin.InteriorItemList.Concat(Plugin.ExteriorItemList).ToList();
             var itemSheet = DalamudApi.DataManager.GetExcelSheet<Item>(targetLang);
             var stainSheet = DalamudApi.DataManager.GetExcelSheet<Stain>(targetLang);
+            
             foreach (var housingItem in allItems)
             {
                 if (!itemSheet.HasRow(housingItem.ItemKey)) continue;
                 var itemRow = itemSheet.GetRow(housingItem.ItemKey);
                 string dyeName = (housingItem.Stain != 0 && stainSheet.HasRow(housingItem.Stain)) ? stainSheet.GetRow(housingItem.Stain).Name.ToString() : "";
                 string uniqueKey = $"{itemRow.RowId}_{dyeName}";
-                if (results.ContainsKey(uniqueKey)) results[uniqueKey] = (itemRow.RowId, itemRow.Name.ToString(), results[uniqueKey].Count + 1, dyeName);
-                else results[uniqueKey] = (itemRow.RowId, itemRow.Name.ToString(), 1, dyeName);
+                
+                if (results.ContainsKey(uniqueKey)) 
+                {
+                    var cur = results[uniqueKey];
+                    results[uniqueKey] = (cur.ItemId, cur.Name, cur.NeededCount + 1, cur.OwnedCount, cur.Dye);
+                }
+                else 
+                {
+                    // 🔍 调用全背包扫描引擎！
+                    int owned = InventoryScanner.GetOwnedCount(itemRow.RowId);
+                    results[uniqueKey] = (itemRow.RowId, itemRow.Name.ToString(), 1, owned, dyeName);
+                }
             }
             return results;
+        }
+
+        // 🚀 修改导出逻辑：只导出“还缺的部分”
+        private void ExportToTeamcraft(Dalamud.Game.ClientLanguage targetLang)
+        {
+            var materials = AggregateItems(targetLang);
+            
+            string exportText = materials.Values
+                .Select(m => {
+                    int missing = Math.Max(0, m.NeededCount - m.OwnedCount);
+                    return missing > 0 ? $"{m.Name} x{missing}\n" : "";
+                })
+                .Aggregate("", (c, s) => c + s);
+
+            if (string.IsNullOrWhiteSpace(exportText))
+            {
+                Log(Lang.GetText("You already own all required items!"));
+            }
+            else
+            {
+                ImGui.SetClipboardText(exportText); 
+                Log(Lang.GetText("List copied to clipboard! Paste it into Teamcraft."));
+            }
+        }
+
+        // 🚀 修改导出逻辑：附带拥有和缺失详情
+        private void ExportToCSV(Dalamud.Game.ClientLanguage targetLang)
+        {
+            var materials = AggregateItems(targetLang);
+            if (materials.Count == 0) return;
+            
+            string header = $"{Lang.GetText("Item ID")},{Lang.GetText("Item Name")},{Lang.GetText("Needed")},{Lang.GetText("Owned")},{Lang.GetText("Missing")},{Lang.GetText("Dye/Stain")}\n";
+            string body = materials.Values.Aggregate("", (c, m) => 
+                c + $"{m.ItemId},{m.Name},{m.NeededCount},{m.OwnedCount},{Math.Max(0, m.NeededCount-m.OwnedCount)},{(m.Dye == "" ? Lang.GetText("None") : m.Dye)}\n");
+            
+            ImGui.SetClipboardText(header + body);
+            Log(Lang.GetText("CSV copied to clipboard! Paste it into Excel."));
         }
 
         #endregion
