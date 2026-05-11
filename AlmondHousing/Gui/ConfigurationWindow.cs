@@ -21,7 +21,7 @@ namespace AlmondHousing.Gui
         private string CustomTag = string.Empty;
         private readonly Dictionary<uint, uint> iconToFurniture = new() { };
 
-        // === 🎨 现代感配色：深空灰 + 杏仁金 ===
+        // === 🎨 现代感配色 ===
         private readonly Vector4 THEME_BASE = new(0.20f, 0.20f, 0.20f, 1f);     
         private readonly Vector4 THEME_HOVER = new(0.35f, 0.35f, 0.35f, 1f);    
         private readonly Vector4 THEME_ACTIVE = new(0.45f, 0.45f, 0.45f, 1f);   
@@ -50,22 +50,41 @@ namespace AlmondHousing.Gui
                 return;
             }
 
-            // --- 🚀 动态计算侧边栏宽度，完美适应多语言超长文本 ---
-            float maxTextWidth = ImGui.CalcTextSize(Lang.GetText("Plugin Interface Language / 插件语言")).X;
-            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Interior Furniture")).X);
-            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Interior Fixtures")).X);
-            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Layout")).X);
+            // 安全获取插件版本号，并进行简略化处理
+            string version = typeof(AlmondHousing).Assembly.GetName().Version?.ToString();
+            if (string.IsNullOrEmpty(version)) version = "7.5.1.0";
+            if (version.EndsWith(".0")) version = version.Substring(0, version.Length - 2); // 例如 7.5.1.0 简略为 7.5.1
+            
+            string versionText = $" v{version}";
+            string authorText = " By AlmondCookie";
 
-            float sidebarWidth = maxTextWidth + 40f; 
-            if (sidebarWidth < 180f) sidebarWidth = 180f; 
+            // --- 🚀 侧边栏宽度全自动计算 ---
+            float maxTextWidth = ImGui.CalcTextSize(Lang.GetText("Home")).X;
+            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Interior Furniture")).X);
+            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Fixtures")).X);
+            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Layout & Export")).X);
+            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(Lang.GetText("Settings")).X);
+            maxTextWidth = Math.Max(maxTextWidth, ImGui.CalcTextSize(authorText).X);
+
+            float sidebarWidth = maxTextWidth + 65f; 
+            if (sidebarWidth < 200f) sidebarWidth = 200f; 
 
             // 1. 左侧：导航面板
             ImGui.BeginChild("AlmondSidebar", new Vector2(sidebarWidth, 0), true);
             {
-                DrawSidebarItem(Lang.GetText("Interior Furniture"), 0);
-                DrawSidebarItem(Lang.GetText("Interior Fixtures"), 1);
-                DrawSidebarItem(Lang.GetText("Layout"), 2);
-                DrawSidebarItem(Lang.GetText("Plugin Interface Language / 插件语言"), 3);
+                DrawSidebarItem(FontAwesomeIcon.Home, Lang.GetText("Home"), 0);
+                DrawSidebarItem(FontAwesomeIcon.Chair, Lang.GetText("Interior Furniture"), 1); 
+                DrawSidebarItem(FontAwesomeIcon.PaintRoller, Lang.GetText("Fixtures"), 2);               
+                DrawSidebarItem(FontAwesomeIcon.FileExport, Lang.GetText("Layout & Export"), 3);        
+                DrawSidebarItem(FontAwesomeIcon.Cog, Lang.GetText("Settings"), 4);               
+
+                // 底部作者信息 (动态防重叠)
+                ImGui.SetCursorPosY(Math.Max(ImGui.GetCursorPosY() + 20, ImGui.GetWindowHeight() - 60));
+                ImGui.Separator();
+                ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1f));
+                ImGui.TextUnformatted(versionText);
+                ImGui.TextUnformatted(authorText);
+                ImGui.PopStyleColor();
             }
             ImGui.EndChild();
 
@@ -76,10 +95,11 @@ namespace AlmondHousing.Gui
             {
                 switch (selectedTab)
                 {
-                    case 0: DrawFurnitureTab(); break;
-                    case 1: DrawFixtureTab(); break;
-                    case 2: DrawLayoutFileTab(); break;
-                    case 3: DrawSettingsTab(); break;
+                    case 0: DrawHomeTab(); break;
+                    case 1: DrawFurnitureTab(); break;
+                    case 2: DrawFixtureTab(); break;
+                    case 3: DrawLayoutFileTab(); break;
+                    case 4: DrawSettingsTab(); break;
                 }
             }
             ImGui.EndChild();
@@ -87,45 +107,97 @@ namespace AlmondHousing.Gui
             this.FileDialogManager.Draw();
         }
 
-        private void DrawSidebarItem(string label, int index)
+        // === 🛠️ 侧边栏渲染函数 (FontAwesome 版) ===
+        private void DrawSidebarItem(FontAwesomeIcon icon, string label, int index)
         {
             bool isSelected = selectedTab == index;
-            float height = 32f;
+            float height = 36f;
             Vector2 startPos = ImGui.GetCursorPos();
 
-            // 1. 绘制底层的 Selectable（透明点击栏）
             if (ImGui.Selectable($"##{index}_{label}", isSelected, ImGuiSelectableFlags.None, new Vector2(0, height)))
             {
                 selectedTab = index;
             }
-            Vector2 endPos = ImGui.GetCursorPos();
 
-            // 2. 绘制选中状态的高亮强调线
             if (isSelected) 
             {
                 var min = ImGui.GetItemRectMin();
                 var max = ImGui.GetItemRectMax();
-                ImGui.GetWindowDrawList().AddLine(
-                    new Vector2(min.X + 2, min.Y + 4), 
-                    new Vector2(min.X + 2, max.Y - 4), 
-                    ImGui.ColorConvertFloat4ToU32(ACCENT_COLOR), 
-                    4.0f);
+                ImGui.GetWindowDrawList().AddLine(new Vector2(min.X + 2, min.Y + 4), new Vector2(min.X + 2, max.Y - 4), ImGui.ColorConvertFloat4ToU32(ACCENT_COLOR), 4.0f);
             }
 
-            // 3. 覆盖绘制文字：固定向右偏移 15 像素，实现完美对齐
+            // 绘制矢量图标
+            ImGui.SetCursorPos(new Vector2(startPos.X + 10, startPos.Y + (height - ImGui.GetTextLineHeight()) / 2));
+            ImGui.PushFont(UiBuilder.IconFont);
             if (isSelected) ImGui.PushStyleColor(ImGuiCol.Text, ACCENT_COLOR);
-            ImGui.SetCursorPos(new Vector2(startPos.X + 15, startPos.Y + (height - ImGui.GetTextLineHeight()) / 2));
+            ImGui.Text(icon.ToIconString());
+            if (isSelected) ImGui.PopStyleColor();
+            ImGui.PopFont();
+
+            // 绘制文字
+            if (isSelected) ImGui.PushStyleColor(ImGuiCol.Text, ACCENT_COLOR);
+            ImGui.SetCursorPos(new Vector2(startPos.X + 38, startPos.Y + (height - ImGui.GetTextLineHeight()) / 2));
             ImGui.Text(label);
             if (isSelected) ImGui.PopStyleColor();
 
-            ImGui.SetCursorPos(endPos);
-            ImGui.Spacing();
+            ImGui.SetCursorPos(new Vector2(startPos.X, startPos.Y + height + 4));
         }
 
-        #region 选项卡内容渲染区
+        // === 🛠️ 辅助：内联图标渲染 (FontAwesome 版) ===
+        private void DrawInlineIcon(FontAwesomeIcon icon)
+        {
+            ImGui.PushFont(UiBuilder.IconFont);
+            ImGui.Text(icon.ToIconString());
+            ImGui.PopFont();
+        }
+
+        #region 各选项卡内容渲染
+
+        private void DrawHomeTab()
+        {
+            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Welcome to AlmondHousing!"));
+            ImGui.Separator();
+            ImGui.Dummy(new Vector2(0, 10));
+
+            ImGui.BeginChild("HomeInfo", new Vector2(0, 0), false);
+            {
+                ImGui.TextColored(ACCENT_COLOR, Lang.GetText("About this Plugin"));
+                ImGui.TextWrapped(Lang.GetText("HomeDesc1"));
+                ImGui.Dummy(new Vector2(0, 10));
+
+                ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Core Features"));
+                ImGui.BulletText(Lang.GetText("Feat1"));
+                ImGui.BulletText(Lang.GetText("Feat2"));
+                ImGui.BulletText(Lang.GetText("Feat3"));
+                ImGui.BulletText(Lang.GetText("Feat4"));
+                ImGui.Dummy(new Vector2(0, 10));
+                
+                // --- 🚀 完美应用 loc.json 里所有的致敬文案翻译 ---
+                ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Credits & Acknowledgements"));
+                ImGui.TextWrapped(Lang.GetText("CreditDesc"));
+                ImGui.Dummy(new Vector2(0, 5));
+                ImGui.Indent(10f);
+                ImGui.TextWrapped(Lang.GetText("Credit1"));
+                ImGui.TextWrapped(Lang.GetText("Credit2"));
+                ImGui.TextWrapped(Lang.GetText("Credit3"));
+                ImGui.TextWrapped(Lang.GetText("Credit4"));
+                ImGui.Unindent(10f);
+                ImGui.Dummy(new Vector2(0, 15));
+
+                ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1.0f, 0.4f, 0.4f, 1.0f)); 
+                ImGui.TextUnformatted(Lang.GetText("Strict Anti-Resell Warning"));
+                ImGui.Separator();
+                ImGui.TextWrapped(Lang.GetText("Warn1"));
+                ImGui.TextWrapped(Lang.GetText("Warn2"));
+                ImGui.TextWrapped(Lang.GetText("Warn3"));
+                ImGui.PopStyleColor();
+            }
+            ImGui.EndChild();
+        }
 
         private void DrawFurnitureTab()
         {
+            DrawInlineIcon(FontAwesomeIcon.Search); ImGui.SameLine();
             ImGui.SetNextItemWidth(-1);
             ImGui.InputTextWithHint("##SearchBox", Lang.GetText("Search furniture name..."), ref searchQuery, 256);
             ImGui.Dummy(new Vector2(0, 5));
@@ -172,7 +244,8 @@ namespace AlmondHousing.Gui
 
         private void DrawLayoutFileTab()
         {
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Layout"));
+            DrawInlineIcon(FontAwesomeIcon.FolderOpen); ImGui.SameLine();
+            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Layout & Export"));
             ImGui.Separator();
             ImGui.Dummy(new Vector2(0, 5));
 
@@ -180,20 +253,30 @@ namespace AlmondHousing.Gui
             {
                 ImGui.TextWrapped($"{Lang.GetText("Current file location:")}\n{Config.SaveLocation}");
                 ImGui.Dummy(new Vector2(0, 5));
-                if (ImGui.Button(Lang.GetText("Save"), new Vector2(100, 30))) SaveLayoutToFile();
+                
+                // 🚀 按钮弹性自适应宽度
+                string saveText = Lang.GetText("Save");
+                if (ImGui.Button(saveText, new Vector2(Math.Max(100, ImGui.CalcTextSize(saveText).X + 40), 30))) SaveLayoutToFile();
                 ImGui.SameLine();
-                if (ImGui.Button(Lang.GetText("Load"), new Vector2(100, 30))) { CreateAutoBackup(); LoadLayoutFromFile(); }
+                
+                string loadText = Lang.GetText("Load");
+                if (ImGui.Button(loadText, new Vector2(Math.Max(100, ImGui.CalcTextSize(loadText).X + 40), 30))) { CreateAutoBackup(); LoadLayoutFromFile(); }
             }
 
-            if (ImGui.Button(Lang.GetText("Save As"), new Vector2(100, 30))) ShowSaveDialog();
+            // 🚀 按钮弹性自适应宽度
+            string saveAsText = Lang.GetText("Save As");
+            if (ImGui.Button(saveAsText, new Vector2(Math.Max(100, ImGui.CalcTextSize(saveAsText).X + 40), 30))) ShowSaveDialog();
             ImGui.SameLine();
-            if (ImGui.Button(Lang.GetText("Load From"), new Vector2(100, 30))) ShowLoadDialog();
+            
+            string loadFromText = Lang.GetText("Load From");
+            if (ImGui.Button(loadFromText, new Vector2(Math.Max(100, ImGui.CalcTextSize(loadFromText).X + 40), 30))) ShowLoadDialog();
 
             ImGui.Dummy(new Vector2(0, 15));
+            DrawInlineIcon(FontAwesomeIcon.ShoppingCart); ImGui.SameLine();
             ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Export Shopping List (导出购物清单)"));
             ImGui.Separator();
 
-            ImGui.SetNextItemWidth(120);
+            ImGui.SetNextItemWidth(180); 
             if (ImGui.BeginCombo("##ExportLang", currentExportLang.ToString()))
             {
                 foreach (var lang in new[] { Dalamud.Game.ClientLanguage.English, Dalamud.Game.ClientLanguage.Japanese, Dalamud.Game.ClientLanguage.German, Dalamud.Game.ClientLanguage.French })
@@ -210,21 +293,25 @@ namespace AlmondHousing.Gui
 
         private void DrawSettingsTab()
         {
+            DrawInlineIcon(FontAwesomeIcon.ExclamationTriangle); ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1.0f, 0.3f, 0.3f, 1.0f)); 
             ImGui.TextWrapped(Lang.GetText("Anti-Resell Warning"));
             ImGui.PopStyleColor(); 
             ImGui.Dummy(new Vector2(0, 10));
 
+            DrawInlineIcon(FontAwesomeIcon.Globe); ImGui.SameLine();
+            ImGui.Text(Lang.GetText("Plugin Interface Language / 插件语言"));
+            
             string[] supportedLangNames = { "简体中文", "繁體中文", "English", "日本語", "한국어", "Deutsch", "Français" };
             string[] supportedLangs = { "zh", "zh_TW", "en", "ja", "ko", "de", "fr" };
             int currentLangIndex = Math.Max(0, Array.IndexOf(supportedLangs, Config.UILanguage));
 
-            ImGui.Text(Lang.GetText("Plugin Interface Language / 插件语言"));
-            ImGui.SetNextItemWidth(150);
+            ImGui.SetNextItemWidth(180); 
             if (ImGui.BeginCombo("##UILang", supportedLangNames[currentLangIndex]))
             {
                 for (int i = 0; i < supportedLangs.Length; i++)
                 {
+                    DrawInlineIcon(FontAwesomeIcon.Globe); ImGui.SameLine();
                     if (ImGui.Selectable(supportedLangNames[i], currentLangIndex == i))
                     {
                         Config.UILanguage = supportedLangs[i];
@@ -238,17 +325,25 @@ namespace AlmondHousing.Gui
             ImGui.Separator();
             ImGui.Dummy(new Vector2(0, 5));
 
+            DrawInlineIcon(FontAwesomeIcon.CheckSquare); ImGui.SameLine();
             if (ImGui.Checkbox(Lang.GetText("Apply Layout"), ref Config.ApplyLayout)) Config.Save();
+            
+            DrawInlineIcon(FontAwesomeIcon.Tag); ImGui.SameLine();
             if (ImGui.Checkbox(Lang.GetText("Label Furniture"), ref Config.DrawScreen)) Config.Save();
+            
+            DrawInlineIcon(FontAwesomeIcon.InfoCircle); ImGui.SameLine();
             if (ImGui.Checkbox(Lang.GetText("Show Tooltips"), ref Config.ShowTooltips)) Config.Save();
 
+            DrawInlineIcon(FontAwesomeIcon.Clock); ImGui.SameLine();
             ImGui.SetNextItemWidth(100);
             if (ImGui.InputInt(Lang.GetText("Placement Interval (ms)"), ref Config.LoadInterval)) Config.Save();
 
             if (Memory.Instance != null && Memory.Instance.GetCurrentTerritory() == Memory.HousingArea.Indoors && Memory.Instance.GetIndoorHouseSize() != "Apartment")
             {
                 ImGui.Dummy(new Vector2(0, 5));
+                DrawInlineIcon(FontAwesomeIcon.LayerGroup); ImGui.SameLine();
                 ImGui.Text(Lang.GetText("Selected Floors"));
+                
                 if (ImGui.Checkbox(Lang.GetText("Basement"), ref Config.Basement)) Config.Save();
                 ImGui.SameLine();
                 if (ImGui.Checkbox(Lang.GetText("Ground Floor"), ref Config.GroundFloor)) Config.Save();
@@ -276,8 +371,18 @@ namespace AlmondHousing.Gui
         {
             if (icon < 65000)
             {
-                var iconTexture = DalamudApi.TextureProvider.GetFromGameIcon(new GameIconLookup(icon));
-                ImGui.Image(iconTexture.GetWrapOrEmpty().Handle, size);
+                try
+                {
+                    var iconTexture = DalamudApi.TextureProvider.GetFromGameIcon(new GameIconLookup(icon));
+                    if (iconTexture?.GetWrapOrEmpty() != null)
+                    {
+                        ImGui.Image(iconTexture.GetWrapOrEmpty().Handle, size);
+                    }
+                }
+                catch (Exception)
+                {
+                    ImGui.Dummy(size);
+                }
             }
         }
 
