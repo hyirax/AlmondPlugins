@@ -1,0 +1,13 @@
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.csproj.AssemblyReference.cache
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.GeneratedMSBuildEditorConfig.editorconfig
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.AssemblyInfoInputs.cache
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.AssemblyInfo.cs
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.csproj.CoreCompileInputs.cache
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.sourcelink.json
+D:\Backup\Documents\GitHub\DisPlace-cn\bin\DisPlacePlugin.deps.json
+D:\Backup\Documents\GitHub\DisPlace-cn\bin\DisPlacePlugin.dll
+D:\Backup\Documents\GitHub\DisPlace-cn\bin\DisPlacePlugin.pdb
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlace.53C0A8A1.Up2Date
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.dll
+D:\Backup\Documents\GitHub\DisPlace-cn\DisPlacePlugin\obj\Debug\DisPlacePlugin.pdb
+D:\Backup\Documents\GitHub\DisPlace-cn\bin\loc_zh.json
