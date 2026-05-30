@@ -21,7 +21,7 @@ namespace AlmondHousing
                     string json = File.ReadAllText(filePath);
                     _allTranslations = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json) ?? new();
                 }
-                catch { } // 遇到错误静默忽略即可
+                catch { } 
             }
         }
 

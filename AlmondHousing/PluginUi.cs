@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AlmondHousing.Gui;
 using Dalamud.Interface.Windowing;
 

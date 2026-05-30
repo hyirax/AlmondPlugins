@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.ImGuiFileDialog;
+using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Utility;
 using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
@@ -41,6 +41,13 @@ namespace AlmondHousing.Gui
         private string searchQuery = string.Empty;
 
         private int selectedTab = 0;
+        // Animated collapsing header states
+        private bool _interiorFurnitureOpen = true;
+        private bool _exteriorFurnitureOpen = true;
+        private bool _unusedFurnitureOpen = true;
+        private bool _interiorFixturesOpen = true;
+        private bool _exteriorFixturesOpen = true;
+
         
         private Dictionary<int, float> _sidebarAnimStates = new Dictionary<int, float>();
         private string _antiResellInput = string.Empty;
@@ -126,12 +133,16 @@ namespace AlmondHousing.Gui
             ImGui.PushStyleColor(ImGuiCol.ScrollbarGrabHovered, ACCENT_COLOR);
 
             ImGui.PushStyleColor(ImGuiCol.CheckMark, ACCENT_COLOR); 
+
+            ImGui.PushStyleColor(ImGuiCol.ResizeGrip, THEME_HOVER);
+            ImGui.PushStyleColor(ImGuiCol.ResizeGripHovered, ACCENT_COLOR);
+            ImGui.PushStyleColor(ImGuiCol.ResizeGripActive, ACCENT_COLOR);
         }
 
         public override void PostDraw()
         {
             ImGui.PopStyleVar(9); 
-            ImGui.PopStyleColor(22); 
+            ImGui.PopStyleColor(25); 
         }
 
         public override void Draw()
@@ -145,6 +156,7 @@ namespace AlmondHousing.Gui
                 
                 ImGui.SetCursorPosY(20);
                 ImGui.SetCursorPosX(ImGui.GetWindowWidth() / 2 - 90);
+                
                 string[] supportedLangNames = { "简体中文", "繁體中文", "English", "日本語", "한국어", "Deutsch", "Français" };
                 string[] supportedLangs = { "zh", "zh_TW", "en", "ja", "ko", "de", "fr" };
                 int currentLangIndex = Math.Max(0, Array.IndexOf(supportedLangs, Config.UILanguage));
@@ -186,6 +198,7 @@ namespace AlmondHousing.Gui
                 ImGui.Dummy(new Vector2(0, 10));
 
                 string expectedPhrase = GetAntiResellPhrase();
+                
                 ImGui.PushFont(UiBuilder.DefaultFont); 
                 string displayPhrase = $"【 {expectedPhrase} 】";
                 ImGui.SetCursorPosX(ImGui.GetWindowWidth() / 2 - ImGui.CalcTextSize(displayPhrase).X / 2);
@@ -298,7 +311,6 @@ namespace AlmondHousing.Gui
             ImGui.PopStyleColor(2);
 
             bool isHovered = ImGui.IsItemHovered();
-
             float targetState = isSelected ? 1f : (isHovered ? 0.3f : 0f);
             float deltaTime = ImGui.GetIO().DeltaTime;
             _sidebarAnimStates[index] += (targetState - _sidebarAnimStates[index]) * (deltaTime * 15.0f);
@@ -357,340 +369,6 @@ namespace AlmondHousing.Gui
             ImGui.PopFont();
         }
 
-        private void DrawHomeTab()
-        {
-            DrawInlineIconColored(FontAwesomeIcon.Leaf, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Welcome to AlmondHousing!"));
-            ImGui.Separator();
-            ImGui.Dummy(new Vector2(0, 10));
-
-            ImGui.BeginChild("HomeInfo", new Vector2(0, 0), false);
-            {
-                DrawInlineIconColored(FontAwesomeIcon.InfoCircle, ACCENT_COLOR); ImGui.SameLine();
-                ImGui.TextColored(ACCENT_COLOR, Lang.GetText("About this Plugin"));
-                ImGui.TextWrapped(Lang.GetText("HomeDesc1"));
-                ImGui.Dummy(new Vector2(0, 10));
-
-                DrawInlineIconColored(FontAwesomeIcon.Star, ACCENT_COLOR); ImGui.SameLine();
-                ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Core Features"));
-                ImGui.BulletText(Lang.GetText("Feat1"));
-                ImGui.BulletText(Lang.GetText("Feat2"));
-                ImGui.BulletText(Lang.GetText("Feat3"));
-                ImGui.BulletText(Lang.GetText("Feat4"));
-                ImGui.Dummy(new Vector2(0, 10));
-                
-                DrawInlineIconColored(FontAwesomeIcon.Heart, ACCENT_COLOR); ImGui.SameLine();
-                ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Credits & Acknowledgements"));
-                ImGui.TextWrapped(Lang.GetText("CreditDesc"));
-                ImGui.Dummy(new Vector2(0, 5));
-                ImGui.Indent(10f);
-                ImGui.TextWrapped(Lang.GetText("Credit1"));
-                ImGui.TextWrapped(Lang.GetText("Credit2"));
-                ImGui.TextWrapped(Lang.GetText("Credit3"));
-                ImGui.TextWrapped(Lang.GetText("Credit4"));
-                ImGui.Unindent(10f);
-                ImGui.Dummy(new Vector2(0, 15));
-
-                DrawInlineIconColored(FontAwesomeIcon.Ban, new Vector4(1.0f, 0.4f, 0.4f, 1.0f)); ImGui.SameLine();
-                ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1.0f, 0.4f, 0.4f, 1.0f)); 
-                ImGui.TextUnformatted(Lang.GetText("Strict Anti-Resell Warning"));
-                ImGui.Separator();
-                ImGui.TextWrapped(Lang.GetText("Warn1"));
-                ImGui.TextWrapped(Lang.GetText("Warn2"));
-                ImGui.TextWrapped(Lang.GetText("Warn3"));
-                ImGui.PopStyleColor();
-            }
-            ImGui.EndChild();
-        }
-
-        private void DrawFurnitureTab()
-        {
-            DrawInlineIconColored(FontAwesomeIcon.Search, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.SetNextItemWidth(-1);
-            ImGui.InputTextWithHint("##SearchBox", Lang.GetText("Search furniture name..."), ref searchQuery, 256);
-            ImGui.Dummy(new Vector2(0, 5));
-
-            DrawInlineIconColored(FontAwesomeIcon.Filter, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Smart Filter:"));
-            ImGui.SameLine();
-
-            DrawInlineIconColored(FontAwesomeIcon.ExclamationTriangle, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.Checkbox(Lang.GetText("Only show misplaced furniture"), ref showOnlyMisplaced);
-            if (ImGui.IsItemHovered()) ImGui.SetTooltip(Lang.GetText("Check to show only items that are not in the correct position or rotation."));
-
-            ImGui.SameLine();
-            ImGui.Spacing();
-            ImGui.SameLine();
-
-            DrawInlineIconColored(FontAwesomeIcon.ShoppingCart, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.Checkbox(Lang.GetText("Only show missing furniture"), ref showOnlyMissing);
-            if (ImGui.IsItemHovered()) ImGui.SetTooltip(Lang.GetText("Check to show only items that are missing from your inventory."));
-
-            ImGui.Separator();
-            ImGui.Dummy(new Vector2(0, 5));
-
-            if (ImGui.CollapsingHeader(Lang.GetText("Interior Furniture"), ImGuiTreeNodeFlags.DefaultOpen))
-            {
-                ImGui.PushID("interior");
-                DrawItemList(Plugin.InteriorItemList);
-                ImGui.PopID();
-            }
-            if (ImGui.CollapsingHeader(Lang.GetText("Exterior Furniture"), ImGuiTreeNodeFlags.DefaultOpen))
-            {
-                ImGui.PushID("exterior");
-                DrawItemList(Plugin.ExteriorItemList);
-                ImGui.PopID();
-            }
-            if (ImGui.CollapsingHeader(Lang.GetText("Unused Furniture"), ImGuiTreeNodeFlags.DefaultOpen))
-            {
-                ImGui.PushID("unused");
-                DrawItemList(Plugin.UnusedItemList, true);
-                ImGui.PopID();
-            }
-        }
-
-        private void DrawFixtureTab()
-        {
-            if (ImGui.CollapsingHeader(Lang.GetText("Interior Fixtures"), ImGuiTreeNodeFlags.DefaultOpen))
-            {
-                DrawFixtureList(Plugin.Layout.interiorFixture);
-            }
-            if (ImGui.CollapsingHeader(Lang.GetText("Exterior Fixtures"), ImGuiTreeNodeFlags.DefaultOpen))
-            {
-                DrawFixtureList(Plugin.Layout.exteriorFixture);
-            }
-        }
-
-        private void DrawLayoutFileTab()
-        {
-            DrawInlineIconColored(FontAwesomeIcon.FolderOpen, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Layout & Export"));
-            ImGui.Separator();
-            ImGui.Dummy(new Vector2(0, 10));
-
-            if (AlmondHousing.Session.IsActive && AlmondHousing.Session.TotalCount > 0)
-            {
-                float progress = 1.0f - ((float)AlmondHousing.Session.PendingItems.Count / AlmondHousing.Session.TotalCount);
-                
-                DrawInlineIconColored(FontAwesomeIcon.Tools, new Vector4(0.2f, 0.8f, 1.0f, 1.0f)); ImGui.SameLine();
-                ImGui.TextColored(new Vector4(0.2f, 0.8f, 1.0f, 1.0f), Lang.GetText("Construction in progress..."));
-                
-                ImGui.ProgressBar(progress, new Vector2(-1, 24), string.Format(Lang.GetText("{0} / {1} Completed"), AlmondHousing.Session.TotalCount - AlmondHousing.Session.PendingItems.Count, AlmondHousing.Session.TotalCount));
-                ImGui.Spacing(); ImGui.Separator(); ImGui.Spacing();
-            }
-
-            DrawInlineIconColored(FontAwesomeIcon.Save, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Save Layout"));
-
-            bool hasPermission = Memory.Instance != null && Memory.Instance.IsHousingMode();
-
-            if (hasPermission)
-            {
-                if (!Config.SaveLocation.IsNullOrEmpty())
-                {
-                    ImGui.TextWrapped($"{Lang.GetText("Current Path:")} {Config.SaveLocation}");
-                    
-                    if (CustomUI.AnimatedButton("btn_save", Lang.GetText("Save"), new Vector2(180, 36), FontAwesomeIcon.Save))
-                        SaveLayoutToFile();
-                    ImGui.SameLine();
-                }
-                
-                if (CustomUI.AnimatedButton("btn_save_as", Lang.GetText("Save As"), new Vector2(180, 36), FontAwesomeIcon.FolderOpen))
-                    ShowSaveDialog();
-            }
-            else
-            {
-                ImGui.Dummy(new Vector2(0, 5));
-                DrawInlineIconColored(FontAwesomeIcon.Lock, new Vector4(0.6f, 0.6f, 0.6f, 1.0f)); ImGui.SameLine();
-                ImGui.TextDisabled(Lang.GetText("LockMsg"));
-            }
-
-            ImGui.Dummy(new Vector2(0, 10));
-            ImGui.Separator();
-            ImGui.Dummy(new Vector2(0, 10));
-
-            DrawInlineIconColored(FontAwesomeIcon.FileImport, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Apply & Load Layout"));
-
-            float buttonWidth = 200f; 
-
-            void DrawHelpText(string text)
-            {
-                ImGui.SameLine(0, 15);
-                DrawInlineIconColored(FontAwesomeIcon.InfoCircle, ACCENT_COLOR);
-                ImGui.SameLine();
-                ImGui.TextDisabled(text);
-            }
-
-            if (!Config.SaveLocation.IsNullOrEmpty())
-            {
-                if (CustomUI.AnimatedButton("btn_apply_curr", Lang.GetText("Apply Current"), new Vector2(buttonWidth, 36), FontAwesomeIcon.PlayCircle)) { CreateAutoBackup(); LoadLayoutFromFile(true); }
-                DrawHelpText(Lang.GetText("Read from current path and place immediately"));
-            }
-
-            if (CustomUI.AnimatedButton("btn_apply_file", Lang.GetText("Apply from File"), new Vector2(buttonWidth, 36), FontAwesomeIcon.FileImport)) { ShowLoadDialog(true); }
-            DrawHelpText(Lang.GetText("Select a file and start placing immediately"));
-
-            if (!Config.SaveLocation.IsNullOrEmpty())
-            {
-                if (CustomUI.AnimatedButton("btn_load_curr", Lang.GetText("Load Current"), new Vector2(buttonWidth, 36), FontAwesomeIcon.Sync)) { LoadLayoutFromFile(false); }
-                DrawHelpText(Lang.GetText("Update list only, do not move furniture"));
-            }
-
-            if (CustomUI.AnimatedButton("btn_load_file", Lang.GetText("Load from File"), new Vector2(buttonWidth, 36), FontAwesomeIcon.Folder)) { ShowLoadDialog(false); }
-            DrawHelpText(Lang.GetText("Select file and update list, do not move"));
-
-            ImGui.Dummy(new Vector2(0, 20));
-            
-            DrawInlineIconColored(FontAwesomeIcon.ShoppingCart, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.TextColored(ACCENT_COLOR, Lang.GetText("Export Shopping List"));
-            ImGui.Separator();
-
-            ImGui.SetNextItemWidth(180); 
-            if (ImGui.BeginCombo("##ExportLang", currentExportLang.ToString()))
-            {
-                foreach (var lang in new[] { Dalamud.Game.ClientLanguage.English, Dalamud.Game.ClientLanguage.Japanese, Dalamud.Game.ClientLanguage.German, Dalamud.Game.ClientLanguage.French })
-                {
-                    if (ImGui.Selectable(lang.ToString(), currentExportLang == lang)) currentExportLang = lang;
-                }
-                ImGui.EndCombo();
-            }
-            ImGui.SameLine();
-            if (CustomUI.AnimatedButton("btn_exp_tc", Lang.GetText("Export for Teamcraft"), new Vector2(220, 32), FontAwesomeIcon.Clipboard)) ExportToTeamcraft(currentExportLang);
-            ImGui.SameLine();
-            if (CustomUI.AnimatedButton("btn_exp_csv", Lang.GetText("Export to CSV"), new Vector2(180, 32), FontAwesomeIcon.FileCsv)) ExportToCSV(currentExportLang);
-
-            if (_isDeveloperModeUnlocked)
-            {
-                ImGui.Dummy(new Vector2(0, 20));
-                ImGui.Separator();
-                ImGui.Dummy(new Vector2(0, 10));
-
-                float pulseAlpha = (float)(Math.Sin(ImGui.GetTime() * 5.0) + 1.0) / 2.0f;
-                Vector4 warningColor = new Vector4(1.0f, 0.2f, 0.2f, 0.5f + (pulseAlpha * 0.5f));
-                
-                DrawInlineIconColored(FontAwesomeIcon.UserSecret, warningColor); ImGui.SameLine();
-                ImGui.TextColored(warningColor, Lang.GetText("OverrideActivated"));
-
-                ImGui.Dummy(new Vector2(0, 5));
-                ImGui.TextDisabled(Lang.GetText("DevPrivilegesMsg"));
-
-                ImGui.Dummy(new Vector2(0, 5));
-                
-                ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.3f, 0.1f, 0.4f, 1f));
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.2f, 0.7f, 1f));
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0.7f, 0.3f, 1.0f, 1f));
-
-                if (ImGui.Button(Lang.GetText("ForceExtractSave") + " ##cheat_clone", new Vector2(-1, 40)))
-                {
-                    Plugin.GetGameLayout(); 
-                    ShowSaveDialog();       
-                    Log(Lang.GetText("DataExtractedMsg"));
-                }
-                
-                ImGui.PopStyleColor(3);
-            }
-        }
-
-        private void DrawSettingsTab()
-        {
-            DrawInlineIconColored(FontAwesomeIcon.ExclamationTriangle, new Vector4(1.0f, 0.3f, 0.3f, 1.0f)); ImGui.SameLine();
-            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1.0f, 0.3f, 0.3f, 1.0f)); 
-            ImGui.TextWrapped(Lang.GetText("Anti-Resell Warning"));
-            ImGui.PopStyleColor(); 
-            ImGui.Dummy(new Vector2(0, 10));
-
-            DrawInlineIconColored(FontAwesomeIcon.Globe, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.Text(Lang.GetText("Plugin Interface Language"));
-            
-            string[] supportedLangNames = { "简体中文", "繁體中文", "English", "日本語", "한국어", "Deutsch", "Français" };
-            string[] supportedLangs = { "zh", "zh_TW", "en", "ja", "ko", "de", "fr" };
-            int currentLangIndex = Math.Max(0, Array.IndexOf(supportedLangs, Config.UILanguage));
-
-            ImGui.SetNextItemWidth(180); 
-            if (ImGui.BeginCombo("##UILang", supportedLangNames[currentLangIndex]))
-            {
-                for (int i = 0; i < supportedLangs.Length; i++)
-                {
-                    DrawInlineIconColored(FontAwesomeIcon.Globe, ACCENT_COLOR); ImGui.SameLine();
-                    if (ImGui.Selectable(supportedLangNames[i], currentLangIndex == i))
-                    {
-                        Config.UILanguage = supportedLangs[i];
-                        Config.Save();
-                        Lang.SetLanguage(Config.UILanguage);
-                    }
-                }
-                ImGui.EndCombo();
-            }
-
-            ImGui.Separator();
-            ImGui.Dummy(new Vector2(0, 5));
-
-            DrawInlineIconColored(FontAwesomeIcon.CheckSquare, ACCENT_COLOR); ImGui.SameLine();
-            if (ImGui.Checkbox(Lang.GetText("Apply Layout"), ref Config.ApplyLayout)) Config.Save();
-            
-            // 🚀【量子物理穿透 UI 联动逻辑】(全面替换为多语言支持)
-            AlmondHousing.CheckBDTHCompatibility();
-            if (AlmondHousing.UseEmbeddedBDTH)
-            {
-                DrawInlineIconColored(FontAwesomeIcon.UnlockAlt, ACCENT_COLOR); ImGui.SameLine();
-                if (ImGui.Checkbox(Lang.GetText("EnableQuantumPlace"), ref Config.EnableQuantumPlace)) 
-                {
-                    Config.Save();
-                    Memory.Instance.SetPlaceAnywhere(Config.EnableQuantumPlace); 
-                }
-                if (ImGui.IsItemHovered()) ImGui.SetTooltip(Lang.GetText("QuantumPlaceHelp"));
-            }
-            else
-            {
-                DrawInlineIconColored(FontAwesomeIcon.Link, new Vector4(0.2f, 0.8f, 0.2f, 1.0f)); ImGui.SameLine();
-                ImGui.TextColored(new Vector4(0.2f, 0.8f, 0.2f, 1.0f), Lang.GetText("QuantumPlaceLinked"));
-                if (ImGui.IsItemHovered()) ImGui.SetTooltip(Lang.GetText("QuantumPlaceLinkedHelp"));
-            }
-
-            // 🚀 悬浮窗控制大满贯 (全部多语言化)
-            ImGui.Dummy(new Vector2(0, 5));
-            DrawInlineIconColored(FontAwesomeIcon.Crosshairs, ACCENT_COLOR); ImGui.SameLine();
-            if (ImGui.Checkbox(Lang.GetText("EnableGizmo"), ref Config.UseGizmo)) Config.Save();
-            if (ImGui.IsItemHovered()) ImGui.SetTooltip(Lang.GetText("GizmoHelp"));
-
-            ImGui.SameLine(0, 20);
-            DrawInlineIconColored(FontAwesomeIcon.Anchor, ACCENT_COLOR); ImGui.SameLine();
-            if (ImGui.Checkbox(Lang.GetText("DragSnap"), ref Config.DoSnap)) Config.Save();
-
-            DrawInlineIconColored(FontAwesomeIcon.Pen, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.SetNextItemWidth(150);
-            if (ImGui.InputFloat(Lang.GetText("DragPrecision"), ref Config.Drag, 0.01f, 0.1f, "%.3f"))
-            {
-                Config.Drag = Math.Max(0.001f, Math.Min(Config.Drag, 10f));
-                Config.Save();
-            }
-            
-            ImGui.Dummy(new Vector2(0, 5));
-            DrawInlineIconColored(FontAwesomeIcon.Tag, ACCENT_COLOR); ImGui.SameLine();
-            if (ImGui.Checkbox(Lang.GetText("Label Furniture"), ref Config.DrawScreen)) Config.Save();
-            
-            DrawInlineIconColored(FontAwesomeIcon.InfoCircle, ACCENT_COLOR); ImGui.SameLine();
-            if (ImGui.Checkbox(Lang.GetText("Show Tooltips"), ref Config.ShowTooltips)) Config.Save();
-
-            DrawInlineIconColored(FontAwesomeIcon.Clock, ACCENT_COLOR); ImGui.SameLine();
-            ImGui.SetNextItemWidth(100);
-            if (ImGui.InputInt(Lang.GetText("Placement Interval (ms)"), ref Config.LoadInterval)) Config.Save();
-
-            if (Memory.Instance != null && Memory.Instance.GetCurrentTerritory() == Memory.HousingArea.Indoors && Memory.Instance.GetIndoorHouseSize() != "Apartment")
-            {
-                ImGui.Dummy(new Vector2(0, 5));
-                DrawInlineIconColored(FontAwesomeIcon.LayerGroup, ACCENT_COLOR); ImGui.SameLine();
-                ImGui.Text(Lang.GetText("Selected Floors"));
-                
-                if (ImGui.Checkbox(Lang.GetText("Basement"), ref Config.Basement)) Config.Save();
-                ImGui.SameLine();
-                if (ImGui.Checkbox(Lang.GetText("Ground Floor"), ref Config.GroundFloor)) Config.Save();
-                ImGui.SameLine();
-                if (Memory.Instance.HasUpperFloor() && ImGui.Checkbox(Lang.GetText("Upper Floor"), ref Config.UpperFloor)) Config.Save();
-            }
-        }
-
         public static void DrawIcon(ushort icon, Vector2 size)
         {
             if (icon < 65000)
@@ -708,278 +386,6 @@ namespace AlmondHousing.Gui
                     ImGui.Dummy(size);
                 }
             }
-        }
-
-        private bool CheckModeForSave() => true;
-
-        private bool CheckModeForLoad(bool shouldApply)
-        {
-            if (shouldApply && !Memory.Instance.CanEditItem())
-            {
-                LogError(Lang.GetText("Unable to set position outside of Rotate Layout mode"));
-                return false;
-            }
-            if (!shouldApply && !Memory.Instance.IsHousingMode())
-            {
-                LogError(Lang.GetText("Unable to load layouts outside of Layout mode"));
-                return false;
-            }
-            return true;
-        }
-
-        private void CreateAutoBackup()
-        {
-            try
-            {
-                Plugin.GetGameLayout();
-                string backupDir = Path.Combine(AlmondHousing.PluginDirectory, "Backups");
-                if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
-                string backupFileName = $"AutoBackup_{DateTime.Now:yyyyMMdd_HHmmss}.almond";
-                string backupPath = Path.Combine(backupDir, backupFileName);
-                string originalSaveLocation = Config.SaveLocation;
-                Config.SaveLocation = backupPath;
-                AlmondHousing.LayoutManager.ExportLayout();
-                Config.SaveLocation = originalSaveLocation;
-                Log(string.Format(Lang.GetText("Auto-backup created: {0}"), backupFileName));
-            }
-            catch (Exception e) { LogError(string.Format(Lang.GetText("Backup Error: {0}"), e.Message)); }
-        }
-
-        private void ShowSaveDialog()
-        {
-            string saveName = Config.SaveLocation.IsNullOrEmpty() ? "save" : Path.GetFileNameWithoutExtension(Config.SaveLocation);
-            FileDialogManager.SaveFileDialog(Lang.GetText("Select a Save Location"), ".almond", saveName, "almond", (bool ok, string res) =>
-            {
-                if (!ok) return;
-                Config.SaveLocation = res; Config.Save(); SaveLayoutToFile();
-            }, Path.GetDirectoryName(Config.SaveLocation));
-        }
-
-        private void ShowLoadDialog(bool shouldApply)
-        {
-            FileDialogManager.OpenFileDialog(Lang.GetText("Select a Layout File"), ".almond,.json", (bool ok, List<string> res) =>
-            {
-                if (!ok) return;
-                if (shouldApply) CreateAutoBackup(); 
-                Config.SaveLocation = res.FirstOrDefault(""); 
-                Config.Save(); 
-                LoadLayoutFromFile(shouldApply);
-            }, 1, Path.GetDirectoryName(Config.SaveLocation));
-        }
-
-        private void SaveLayoutToFile()
-        {
-            try { Plugin.GetGameLayout(); AlmondHousing.LayoutManager.ExportLayout(); }
-            catch (Exception e) { LogError(string.Format(Lang.GetText("Save Error: {0}"), e.Message), e.StackTrace ?? ""); }
-        }
-
-        private void LoadLayoutFromFile(bool shouldApply)
-        {
-            if (!CheckModeForLoad(shouldApply)) return;
-            try { 
-                SaveLayoutManager.ImportLayout(Config.SaveLocation); 
-                Log(string.Format(Lang.GetText("Imported {0} items"), Plugin.InteriorItemList.Count + Plugin.ExteriorItemList.Count));
-                
-                Plugin.MatchLayout(); 
-                Config.ResetRecord(); 
-
-                InvalidateMaterialCache();
-                
-                if (shouldApply) Plugin.ApplyLayout(); 
-            }
-            catch (Exception e) { LogError(string.Format(Lang.GetText("Load Error: {0}"), e.Message), e.StackTrace ?? ""); }
-        }
-
-        private void DrawFixtureList(List<Fixture> fixtureList)
-        {
-            if (ImGui.Button(Lang.GetText("Clear") + "##Fixture")) { fixtureList.Clear(); Config.Save(); }
-            ImGui.Columns(3, "FixtureList", true);
-            ImGui.Separator();
-            ImGui.Text(Lang.GetText("Level")); ImGui.NextColumn();
-            ImGui.Text(Lang.GetText("Fixture")); ImGui.NextColumn();
-            ImGui.Text(Lang.GetText("Item")); ImGui.NextColumn();
-            ImGui.Separator();
-            var itemSheet = DalamudApi.DataManager.GetExcelSheet<Item>();
-            foreach (var fixture in fixtureList)
-            {
-                ImGui.Text(Lang.GetText(fixture.level ?? "")); ImGui.NextColumn();
-                ImGui.Text(Lang.GetText(fixture.type ?? "")); ImGui.NextColumn();
-                if (itemSheet.HasRow(fixture.itemId)) { DrawIcon(itemSheet.GetRow(fixture.itemId).Icon, new Vector2(20, 20)); ImGui.SameLine(); }
-                ImGui.Text(fixture.name); ImGui.NextColumn();
-                ImGui.Separator();
-            }
-            ImGui.Columns(1);
-        }
-
-        private void DrawItemList(List<HousingItem> itemList, bool isUnused = false)
-        {
-            var filteredList = itemList.Where(x => string.IsNullOrEmpty(searchQuery) || x.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
-            if (ImGui.Button(Lang.GetText("Sort")))
-            {
-                itemList.Sort((x, y) => {
-                    if (x.Name.CompareTo(y.Name) != 0) return x.Name.CompareTo(y.Name);
-                    return x.X.CompareTo(y.X);
-                });
-                Config.Save();
-            }
-            ImGui.SameLine();
-            if (ImGui.Button(Lang.GetText("Clear") + "##ItemClear")) { itemList.Clear(); Config.Save(); }
-
-            var itemSheet = DalamudApi.DataManager.GetExcelSheet<Item>();
-            var groupedItems = filteredList.GroupBy(housingItem => {
-                if (itemSheet.HasRow(housingItem.ItemKey)) {
-                    string catName = itemSheet.GetRow(housingItem.ItemKey).ItemUICategory.Value.Name.ToString();
-                    return string.IsNullOrEmpty(catName) ? Lang.GetText("Unknown") : catName;
-                }
-                return Lang.GetText("Unknown");
-            }).OrderBy(g => g.Key).ToList();
-
-            foreach (var group in groupedItems) {
-                ImGui.PushStyleColor(ImGuiCol.Text, ACCENT_COLOR);
-                if (ImGui.TreeNodeEx($"{group.Key} ({group.Count()})###cat_{group.Key}_{isUnused}", ImGuiTreeNodeFlags.DefaultOpen)) {
-                    ImGui.PopStyleColor();
-                    ImGui.Columns(isUnused ? 4 : 5, $"Table_{group.Key}", true);
-                    ImGui.Separator();
-                    ImGui.Text(Lang.GetText("Item")); ImGui.NextColumn();
-                    ImGui.Text(Lang.GetText("Position (X,Y,Z)")); ImGui.NextColumn();
-                    ImGui.Text(Lang.GetText("Rotation")); ImGui.NextColumn();
-                    ImGui.Text(Lang.GetText("Dye/Material")); ImGui.NextColumn();
-                    if (!isUnused) { ImGui.Text(Lang.GetText("Set Position")); ImGui.NextColumn(); }
-                    ImGui.Separator();
-                    foreach (var housingItem in group) {
-                        
-                        if (showOnlyMisplaced && housingItem.CorrectLocation && housingItem.CorrectRotation) continue;
-                        if (showOnlyMissing && InventoryScanner.GetOwnedCount(housingItem.ItemKey) > 0) continue;
-
-                        int originalIndex = itemList.IndexOf(housingItem);
-                        if (itemSheet.HasRow(housingItem.ItemKey)) { DrawIcon(itemSheet.GetRow(housingItem.ItemKey).Icon, new Vector2(20, 20)); ImGui.SameLine(); }
-                        if (housingItem.ItemStruct == nint.Zero) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1));
-                        ImGui.Text(housingItem.Name); ImGui.NextColumn();
-                        DrawRow(originalIndex, housingItem, !isUnused);
-                        if (housingItem.ItemStruct == nint.Zero) ImGui.PopStyleColor();
-                        ImGui.Separator();
-                    }
-                    ImGui.Columns(1); ImGui.TreePop();
-                } else ImGui.PopStyleColor();
-            }
-        }
-
-        private void DrawRow(int i, HousingItem housingItem, bool showSetPosition = true)
-        {
-            if (!housingItem.CorrectLocation) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1));
-            ImGui.Text($"{housingItem.X:N4}, {housingItem.Y:N4}, {housingItem.Z:N4}"); 
-            if (!housingItem.CorrectLocation) ImGui.PopStyleColor();
-            ImGui.NextColumn();
-            if (!housingItem.CorrectRotation) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1));
-            ImGui.Text($"{housingItem.Rotate:N3}"); 
-            if (!housingItem.CorrectRotation) ImGui.PopStyleColor();
-            ImGui.NextColumn();
-            var stainSheet = DalamudApi.DataManager.GetExcelSheet<Stain>();
-            if (housingItem.Stain != 0 && stainSheet.HasRow(housingItem.Stain)) {
-                Utils.StainButton("dye_" + i, stainSheet.GetRow(housingItem.Stain), new Vector2(20)); ImGui.SameLine();
-                if (!housingItem.DyeMatch) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1));
-                ImGui.Text(stainSheet.GetRow(housingItem.Stain).Name.ToString());
-                if (!housingItem.DyeMatch) ImGui.PopStyleColor();
-            } else if (housingItem.MaterialItemKey != 0) {
-                var it = DalamudApi.DataManager.GetExcelSheet<Item>();
-                if (it.HasRow(housingItem.MaterialItemKey)) { 
-                    if (!housingItem.DyeMatch) ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f, 0.5f, 0.5f, 1));
-                    DrawIcon(it.GetRow(housingItem.MaterialItemKey).Icon, new Vector2(20, 20)); ImGui.SameLine(); 
-                    ImGui.Text(it.GetRow(housingItem.MaterialItemKey).Name.ToString()); 
-                    if (!housingItem.DyeMatch) ImGui.PopStyleColor();
-                }
-            }
-            ImGui.NextColumn();
-            if (showSetPosition) {
-                if (housingItem.ItemStruct != nint.Zero) {
-                    if (ImGui.Button(Lang.GetText("Set") + "##" + i)) { Plugin.MatchLayout(); SetItemPosition(housingItem); }
-                }
-                ImGui.NextColumn();
-            }
-        }
-
-        public unsafe void DrawItemOnScreen()
-        {
-            if (!Config.DrawScreen) return;
-            if (Memory.Instance == null) return;
-            var itemList = Memory.Instance.GetCurrentTerritory() == Memory.HousingArea.Indoors ? Plugin.InteriorItemList : Plugin.ExteriorItemList;
-            
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0f);
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 6.0f); 
-            ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 4.0f); 
-            
-            ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0.02f, 0.02f, 0.02f, 0.92f)); 
-            ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0.0f, 0.0f, 0.0f, 0.0f)); 
-            
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.15f, 0.15f, 0.15f, 0.6f));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.3f, 0.3f, 0.3f, 0.8f));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0.45f, 0.45f, 0.45f, 1.0f));
-
-            for (int i = 0; i < itemList.Count(); i++)
-            {
-                var playerPos = DalamudApi.ObjectTable.LocalPlayer.Position;
-                var housingItem = itemList[i];
-                if (housingItem.ItemStruct == nint.Zero) continue;
-                
-                var itemStruct = (HousingItemStruct*)housingItem.ItemStruct;
-                var itemPos = new Vector3(itemStruct->Position.X, itemStruct->Position.Y, itemStruct->Position.Z);
-                
-                if (Config.HiddenScreenItemHistory.IndexOf(i) >= 0) continue;
-                if (Config.DrawDistance > 0 && (playerPos - itemPos).Length() > Config.DrawDistance) continue;
-                
-                if (DalamudApi.GameGui.WorldToScreen(itemPos, out var screenCoords))
-                {
-                    if (!_stableScreenCoords.TryGetValue(i, out var stableCoords))
-                    {
-                        stableCoords = screenCoords;
-                        _stableScreenCoords[i] = stableCoords;
-                    }
-
-                    if (Vector2.Distance(screenCoords, stableCoords) > 2.5f)
-                    {
-                        stableCoords = screenCoords;
-                        _stableScreenCoords[i] = stableCoords;
-                    }
-
-                    float snappedX = (float)Math.Floor(stableCoords.X);
-                    float snappedY = (float)Math.Floor(stableCoords.Y);
-                    
-                    ImGui.SetNextWindowPos(new Vector2(snappedX, snappedY));
-                    
-                    if (ImGui.Begin("HousingItem" + i, ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNav))
-                    {
-                        float distance = Vector3.Distance(playerPos, itemPos);
-                        Vector4 textColor;
-                        FontAwesomeIcon icon;
-
-                        if (housingItem.CorrectLocation && housingItem.CorrectRotation)
-                        {
-                            textColor = new Vector4(0.5f, 0.5f, 0.5f, 0.8f); 
-                            icon = FontAwesomeIcon.CheckCircle;
-                        }
-                        else
-                        {
-                            textColor = new Vector4(1.0f, 0.65f, 0.0f, 1.0f); 
-                            icon = FontAwesomeIcon.Crosshairs;
-                        }
-
-                        DrawInlineIconColored(icon, textColor);
-                        ImGui.SameLine();
-                        ImGui.TextColored(textColor, $"{housingItem.Name} [{distance:F0}m]");
-                        
-                        ImGui.SameLine();
-                        if (ImGui.Button(Lang.GetText("Set") + "##ScreenItem" + i.ToString()))
-                        {
-                            if (!Memory.Instance.CanEditItem()) continue;
-                            SetItemPosition(housingItem); Config.HiddenScreenItemHistory.Add(i); Config.Save();
-                        }
-                        ImGui.End();
-                    }
-                }
-            }
-
-            ImGui.PopStyleColor(5);
-            ImGui.PopStyleVar(3);
         }
     }
 }

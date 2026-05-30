@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -7,6 +7,8 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.MJI;
 using FFXIVClientStructs.FFXIV.Client.LayoutEngine;
 using Lumina.Excel.Sheets;
+using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
+using FFXIVClientStructs.FFXIV.Client.Game.Control;
 
 namespace AlmondHousing
 {
@@ -15,24 +17,35 @@ namespace AlmondHousing
         public static GetInventoryContainerDelegate GetInventoryContainer;
         public delegate InventoryContainer* GetInventoryContainerDelegate(IntPtr inventoryManager, InventoryType inventoryType);
 
-        // 🚀 整合 BDTH 核心：全套内存断脉补丁地址
         public IntPtr placeAnywhere;
         public IntPtr wallAnywhere;
         public IntPtr wallmountAnywhere;
         public IntPtr showcasePlaceAddress;
         public IntPtr showcaseRotateAddress;
 
-        // 🚀 修复报错方案：绝对路径强制引用，无视警告检查
+        // 🚀【第四阶段：安全气囊 1】绝对路径强锁定，彻底消灭 CS0104 冲突与 CS8500 指针警告
 #pragma warning disable CS8500
-        public static unsafe FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Camera* Camera => &FFXIVClientStructs.FFXIV.Client.Game.Control.CameraManager.Instance()->GetActiveCamera()->CameraBase.SceneCamera;
+        public static unsafe FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Camera* Camera
+        {
+            get
+            {
+                try
+                {
+                    var manager = FFXIVClientStructs.FFXIV.Client.Game.Control.CameraManager.Instance();
+                    if (manager == null) return null;
+                    var activeCam = manager->GetActiveCamera();
+                    if (activeCam == null) return null;
+                    return &activeCam->CameraBase.SceneCamera;
+                }
+                catch { return null; }
+            }
+        }
 #pragma warning restore CS8500
 
-        // 🚀 BDTH 底裤 2：家具模型瞬间强刷委托 (让微调不用重新选中就能看到移动)
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void HousingLayoutModelUpdateDelegate(nint item);
         public HousingLayoutModelUpdateDelegate HousingLayoutModelUpdate = null!;
 
-        // 🚀 整合 BDTH 核心：备份原厂机器码，供还原使用
         private byte[] showcasePlaceOriginal;
         private byte[] showcaseRotateOriginal;
         private byte[] showcasePlaceNoop;
@@ -42,14 +55,12 @@ namespace AlmondHousing
         {
             try
             {
-                // 1. 普通家具与墙壁限制解除
-                placeAnywhere = DalamudApi.SigScanner.ScanText("C6 83 ?? ?? ?? ?? ?? 0F 29 44 24") + 6;
-                wallAnywhere = DalamudApi.SigScanner.ScanText("48 85 C0 74 ?? C6 87 ?? ?? 00 00 00") + 11;
-                wallmountAnywhere = DalamudApi.SigScanner.ScanText("c6 87 83 01 00 00 00 48 83 c4 ??") + 6;
+                placeAnywhere = DalamudApi.SigScanner.ScanText(Constants.Signatures.PlaceAnywhere) + Constants.Offsets.PlaceAnywhereAdjustment;
+                wallAnywhere = DalamudApi.SigScanner.ScanText(Constants.Signatures.WallAnywhere) + Constants.Offsets.WallAnywhereAdjustment;
+                wallmountAnywhere = DalamudApi.SigScanner.ScanText(Constants.Signatures.WallmountAnywhere) + Constants.Offsets.WallmountAnywhereAdjustment;
 
-                // 2. 展柜与特殊摆件限制解除
-                showcasePlaceAddress = DalamudApi.SigScanner.ScanText("C6 87 ?? ?? 00 00 00 48 8B BC 24 ?? ?? ?? ?? 48");
-                showcaseRotateAddress = DalamudApi.SigScanner.ScanText("88 87 ?? ?? 00 00 0F 28 74 24 ?? 48 8B");
+                showcasePlaceAddress = DalamudApi.SigScanner.ScanText(Constants.Signatures.ShowcasePlace);
+                showcaseRotateAddress = DalamudApi.SigScanner.ScanText(Constants.Signatures.ShowcaseRotate);
 
                 if (showcasePlaceAddress != IntPtr.Zero && showcaseRotateAddress != IntPtr.Zero)
                 {
@@ -60,14 +71,13 @@ namespace AlmondHousing
                     showcaseRotateNoop = Enumerable.Repeat((byte)0x90, showcaseRotateOriginal.Length).ToArray();
                 }
 
-                housingModulePtr = DalamudApi.SigScanner.GetStaticAddressFromSig("48 8B 05 ?? ?? ?? ?? 8B 52");
-                LayoutWorldPtr = DalamudApi.SigScanner.GetStaticAddressFromSig("48 8B D1 48 8B 0D ?? ?? ?? ?? 48 85 C9 74 0A", 3);
+                housingModulePtr = DalamudApi.SigScanner.GetStaticAddressFromSig(Constants.Signatures.HousingModule);
+                LayoutWorldPtr = DalamudApi.SigScanner.GetStaticAddressFromSig(Constants.Signatures.LayoutWorld, Constants.Offsets.LayoutWorldInstructionLength);
 
-                var getInventoryContainerPtr = DalamudApi.SigScanner.ScanText("E8 ?? ?? ?? ?? 40 38 78 18");
+                var getInventoryContainerPtr = DalamudApi.SigScanner.ScanText(Constants.Signatures.GetInventoryContainer);
                 GetInventoryContainer = Marshal.GetDelegateForFunctionPointer<GetInventoryContainerDelegate>(getInventoryContainerPtr);
 
-                // 🚀 扫描并绑定瞬间强刷函数
-                var housingLayoutModelUpdateAddress = DalamudApi.SigScanner.ScanText("48 89 6C 24 ?? 48 89 74 24 ?? 48 89 7C 24 ?? 41 56 48 83 EC 50 48 8B E9 48 8B 49");
+                var housingLayoutModelUpdateAddress = DalamudApi.SigScanner.ScanText(Constants.Signatures.HousingLayoutModelUpdate);
                 HousingLayoutModelUpdate = Marshal.GetDelegateForFunctionPointer<HousingLayoutModelUpdateDelegate>(housingLayoutModelUpdateAddress);
             }
             catch (Exception e)
@@ -80,10 +90,11 @@ namespace AlmondHousing
         public IntPtr housingModulePtr { get; }
         public IntPtr LayoutWorldPtr { get; }
 
+        // 🚀【第四阶段：安全气囊 2】给高危的原生托管指针全部加装空检验防护锁，彻底杜绝游戏切地图或断开联结时直接闪退（CTD）
         public unsafe HousingModule* HousingModule => housingModulePtr != IntPtr.Zero ? (HousingModule*)Marshal.ReadIntPtr(housingModulePtr) : null;
         public unsafe LayoutWorld* LayoutWorld => LayoutWorldPtr != IntPtr.Zero ? (LayoutWorld*)Marshal.ReadIntPtr(LayoutWorldPtr) : null;
-        public unsafe HousingObjectManager* CurrentManager => HousingModule->currentTerritory;
-        public unsafe HousingStructure* HousingStructure => LayoutWorld->HousingStruct;
+        public unsafe HousingObjectManager* CurrentManager => (HousingModule != null && HousingModule->currentTerritory != null) ? HousingModule->currentTerritory : null;
+        public unsafe HousingStructure* HousingStructure => (LayoutWorld != null && LayoutWorld->HousingStruct != null) ? LayoutWorld->HousingStruct : null;
 
         public static void Init() => Instance = new Memory();
         public static InventoryContainer* GetContainer(InventoryType inventoryType) => InventoryManager.Instance()->GetInventoryContainer(inventoryType);
@@ -156,9 +167,13 @@ namespace AlmondHousing
         public unsafe bool TryGetIslandGameObjectList(out List<HousingGameObject> objects)
         {
             objects = new List<HousingGameObject>(200);
-            var manager = (MjiManagerExtended*)MJIManager.Instance();
+            var mjiManager = MJIManager.Instance();
+            if (mjiManager == null) return false;
+            var manager = (MjiManagerExtended*)mjiManager;
             var objectManager = manager->ObjectManager;
+            if (objectManager == null) return false;
             var furnManager = objectManager->FurnitureManager;
+            if (furnManager == null) return false;
             nint* objectsArrayPtr = (nint*)furnManager->Objects;
             ReadOnlySpan<nint> pointerSpan = new ReadOnlySpan<nint>(objectsArrayPtr, 200);
             foreach (ref readonly nint objPtr in pointerSpan)
@@ -249,6 +264,28 @@ namespace AlmondHousing
             {
                 WriteProtectedBytes(showcasePlaceAddress, state ? showcasePlaceNoop : showcasePlaceOriginal);
                 WriteProtectedBytes(showcaseRotateAddress, state ? showcaseRotateNoop : showcaseRotateOriginal);
+            }
+        }
+
+        
+        private static void WriteProtectedBytesBatched(List<(IntPtr addr, byte[] bytes)> writes)
+        {
+            var oldProtections = new Dictionary<IntPtr, Protection>();
+            foreach (var (addr, bytes) in writes)
+            {
+                if (addr == IntPtr.Zero || bytes == null) continue;
+                VirtualProtect(addr, (uint)bytes.Length, Protection.PAGE_EXECUTE_READWRITE, out var oldProt);
+                oldProtections[addr] = oldProt;
+            }
+            foreach (var (addr, bytes) in writes)
+            {
+                if (addr == IntPtr.Zero || bytes == null) continue;
+                Marshal.Copy(bytes, 0, addr, bytes.Length);
+            }
+            foreach (var (addr, bytes) in writes)
+            {
+                if (addr == IntPtr.Zero || bytes == null || !oldProtections.TryGetValue(addr, out var oldProt)) continue;
+                VirtualProtect(addr, (uint)bytes.Length, oldProt, out _);
             }
         }
 

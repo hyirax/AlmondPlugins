@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.Command;
+using Dalamud.Game.Command;
 using Dalamud.Plugin;
 using Lumina.Excel.Sheets;
 using AlmondHousing.Objects;
@@ -26,7 +26,6 @@ namespace AlmondHousing
 
         public static PlacementSession Session = new PlacementSession();
 
-        // 🚀 控制内嵌 BDTH 全区放置的大总管开关
         public static bool UseEmbeddedBDTH { get; set; } = true;
 
         private delegate bool UpdateLayoutDelegate(HousingStructure* layoutWorld);
@@ -79,17 +78,16 @@ namespace AlmondHousing
             HousingData.Init(this);
             Memory.Init();
 
-            // 🚀 主动开启一次全盘动态内存幽灵扫描
             CheckBDTHCompatibility();
             if (UseEmbeddedBDTH && Instance.Config.EnableQuantumPlace)
             {
                 Memory.Instance.SetPlaceAnywhere(true);
             }
 
-            // ⚡⚡⚡ 注入高阶 3D 微调 UI ⚡⚡⚡
             DalamudApi.PluginInterface.UiBuilder.Draw += AdvancedTuningUI.Draw;
 
             LayoutManager = new SaveLayoutManager(this, Config);
+            
             DalamudApi.PluginLog.Info("AlmondHousing Plugin initialized");
 
             PluginDirectory = pi.AssemblyLocation.DirectoryName ?? string.Empty;
@@ -101,21 +99,16 @@ namespace AlmondHousing
             }
         }
 
-        // 👑【动态内存扫描内核】：彻底删除对 IPluginManager 的编译期依赖，100% 防报错
         public static void CheckBDTHCompatibility()
         {
             try
             {
-                // 🛰️ 扫描当前游戏进程执行上下文里加载的所有托管程序集
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                
-                // 如果发现名叫 BDTHPlugin 的程序集存在，说明原版 BDTH 正在运行
                 bool isOriginalBDTHActive = assemblies.Any(a => a.GetName().Name == "BDTHPlugin");
 
                 if (isOriginalBDTHActive)
                 {
                     UseEmbeddedBDTH = false;
-                    // 原版已加载，静默将让出内存修改权以防冲突
                     try { Memory.Instance.SetPlaceAnywhere(false); } catch { }
                 }
                 else
@@ -125,7 +118,6 @@ namespace AlmondHousing
             }
             catch
             {
-                // 异常保底，默认允许内嵌版运行
                 UseEmbeddedBDTH = true;
             }
         }
@@ -149,7 +141,7 @@ namespace AlmondHousing
         internal static nint GetGameObject(nint objList, ushort index) => GetGameObjectHook.Original(objList, index);
 
         public static void SelectItemDetour(HousingStructure* housing, nint item) => SelectItemHook.Original(housing, item);
-        public static void SelectItem(nint item) => SelectItemDetour(Memory.Instance.HousingStructure, item);
+        public static void SelectItem(nint item) { if (Memory.Instance?.HousingStructure != null) SelectItemDetour(Memory.Instance.HousingStructure, item); }
 
         public static void MaybePlacedt(HousingStructure* housingPtr, nint itemPtr, long a) => MaybePlaceh.Original(housingPtr, itemPtr, a);
         public static void MaybePlace(HousingStructure* housingPtr, nint itemPtr, long a) => MaybePlacedt(housingPtr, itemPtr, a);
@@ -164,7 +156,7 @@ namespace AlmondHousing
         public static void PlaceCall(HousingStructure* housingPtr, long a, nint b) => PlaceCalldt(housingPtr, a, b);
 
         public static void ClickItemDetour(HousingStructure* housing, nint item) => ClickItemHook.Original(Memory.Instance.HousingStructure, item);
-        public static void ClickItem(nint item) => ClickItemDetour(Memory.Instance.HousingStructure, item);
+        public static void ClickItem(nint item) { if (Memory.Instance?.HousingStructure != null) ClickItemDetour(Memory.Instance.HousingStructure, item); }
 
         public void RecursivelyPlaceItems()
         {
@@ -242,7 +234,6 @@ namespace AlmondHousing
                 rotation.Y = (float)((rowItem.Rotate - PlotLocation.rotation) * 180 / Math.PI);
             }
             
-            // 🚀 排布之前实时雷达探针重测，决定是由内嵌解锁还是原版解锁
             CheckBDTHCompatibility();
             if (UseEmbeddedBDTH && Instance.Config.EnableQuantumPlace)
             {
@@ -627,7 +618,6 @@ namespace AlmondHousing
             try { Memory.Instance.SetPlaceAnywhere(false); }
             catch (Exception ex) { DalamudApi.PluginLog.Error(ex, "Error while calling PluginMemory.Dispose()"); }
 
-            // ⚡⚡⚡ 断开高阶 UI 电源防止泄漏 ⚡⚡⚡
             DalamudApi.PluginInterface.UiBuilder.Draw -= AdvancedTuningUI.Draw;
 
             DalamudApi.CommandManager.RemoveHandler("/almond");

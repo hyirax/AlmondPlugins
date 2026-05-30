@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Dalamud.Configuration;
 
 namespace AlmondHousing
@@ -28,15 +30,27 @@ namespace AlmondHousing
         public int LoadInterval = 400;
         public bool ApplyLayout = true;
         public bool EnableQuantumPlace = false;
+        public bool AbsoluteSnap = false;
         public bool UseGizmo = false;    // 是否在屏幕上显示 3D 拖拽轴
         public bool DoSnap = false;      // 是否开启拖拽吸附
         public float Drag = 0.05f;       // 鼠标滚轮/拖拽的微调精度
 
         public string SaveLocation = null;
 
+        [NonSerialized]
+        private CancellationTokenSource _saveCts;
+        private static readonly TimeSpan SaveDebounceInterval = TimeSpan.FromMilliseconds(500);
+
         public void Save()
         {
-            DalamudApi.PluginInterface.SavePluginConfig(this);
+            _saveCts?.Cancel();
+            _saveCts = new CancellationTokenSource();
+            var cts = _saveCts;
+            Task.Delay(SaveDebounceInterval, cts.Token).ContinueWith(_ =>
+            {
+                if (!cts.IsCancellationRequested)
+                    DalamudApi.PluginInterface.SavePluginConfig(this);
+            }, TaskContinuationOptions.NotOnCanceled);
         }
 
         public void ResetRecord()

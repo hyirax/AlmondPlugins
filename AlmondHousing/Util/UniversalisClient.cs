@@ -1,8 +1,10 @@
-using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AlmondHousing.Util
@@ -12,16 +14,22 @@ namespace AlmondHousing.Util
         private static readonly HttpClient client = new HttpClient();
         
         // 缓存：记录 物品ID -> 最低单价
-        public static Dictionary<uint, int> PriceCache = new Dictionary<uint, int>();
+        public static ConcurrentDictionary<uint, int> PriceCache = new ConcurrentDictionary<uint, int>();
         
         // 状态锁：防止因连续点击导致请求过快
-        public static bool IsFetching { get; private set; } = false;
+        private static int _isFetching = 0;
+        public static bool IsFetching
+        {
+            get => Volatile.Read(ref _isFetching) == 1;
+            private set => Volatile.Write(ref _isFetching, value ? 1 : 0);
+        }
 
         public static async Task FetchPricesAsync(List<uint> itemIds, uint worldId)
         {
             if (itemIds == null || itemIds.Count == 0 || worldId == 0) return;
             
-            IsFetching = true;
+            // 防止并发请求
+            if (Interlocked.Exchange(ref _isFetching, 1) == 1) return;
 
             try
             {
@@ -46,7 +54,7 @@ namespace AlmondHousing.Util
                         {
                             var root = doc.RootElement;
                             
-                            // 情况 A：查询多个物品时，结果在 "items" 节点下
+                            // 情况 A：查询多个物品时，结果在 "items" 节点中
                             if (root.TryGetProperty("items", out JsonElement itemsElement))
                             {
                                 foreach (var property in itemsElement.EnumerateObject())
@@ -75,12 +83,11 @@ namespace AlmondHousing.Util
             }
             catch (Exception ex)
             {
-                // 这里暂时简单处理错误
-                Console.WriteLine($"Universalis Error: {ex.Message}");
+                DalamudApi.PluginLog.Error($"Universalis Error: {ex.Message}");
             }
             finally
             {
-                IsFetching = false;
+                Volatile.Write(ref _isFetching, 0);
             }
         }
     }

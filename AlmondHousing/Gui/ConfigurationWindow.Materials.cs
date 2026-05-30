@@ -53,7 +53,7 @@ namespace AlmondHousing.Gui
                 "zh" => " 如果刚购买了物品，请点击刷新。",
                 "zh_TW" => " 如果剛購買了物品，請點擊重整。",
                 "ja" => " アイテムを購入したばかりの場合は、更新をクリックしてください。",
-                "ko" => " 아이템을 방금 구매했다면 새로고침을 클릭하세요.",
+                "ko" => " 아이템을 방금 구매했다면 새로고침을 클릭하세요。",
                 "de" => " Klicken Sie auf Aktualisieren, wenn Sie gerade Gegenstände gekauft haben.",
                 "fr" => " Cliquez sur Actualiser si vous venez d'acheter des objets.",
                 _ => " Click refresh if you just bought items."
@@ -69,7 +69,6 @@ namespace AlmondHousing.Gui
 
             string refreshText = GetRefreshButtonText();
 
-            // 🚀【惊艳替换】换成了我们的动态高级按钮，带图标、发光、渐变！
             if (CustomUI.AnimatedButton("btn_refresh_mat", refreshText, new Vector2(240, 36), FontAwesomeIcon.Sync))
             {
                 InvalidateMaterialCache();
@@ -97,7 +96,6 @@ namespace AlmondHousing.Gui
             }
             else
             {
-                // 🚀【惊艳替换】计算预算按钮也换成高级动态按钮！
                 if (CustomUI.AnimatedButton("btn_calc_budget", Lang.GetText("Calculate Budget"), new Vector2(240, 36), FontAwesomeIcon.Calculator))
                 {
                     uint worldId = 0;
