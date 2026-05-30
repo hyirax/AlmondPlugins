@@ -1,64 +1,62 @@
-# 🏡 AlmondHousing
+﻿# 🏡 AlmondHousing
 
 *🌐 Languages: [简体中文](../../README.md) | [繁體中文](../zh_TW/README.md) | [English](../en/README.md) | [日本語](../ja/README.md) | [한국어](../ko/README.md) | [Deutsch](../de/README.md) | **[Français](README.md)***
 
 ---
 
-### 🛑 Avertissement strict contre la revente & Respect des créateurs 🛑
+### ⚠️ Avis important
 
-**Ce plugin est 100% GRATUIT et OPEN-SOURCE ! La vente de ce logiciel sous quelque forme que ce soit est strictement interdite !**
+**Cet outil est entièrement gratuit et accessible au public. La revente sous quelque forme que ce soit est interdite.**
 
-L'objectif initial de cet outil est d'aider les joueurs à **sauvegarder leurs propres décorations** et à **partager gratuitement des plans (blueprints) entre les régions**. Nous ne tolérons absolument pas l'utilisation de cet outil pour voler les conceptions originales d'autres joueurs ou designers à des fins commerciales, de commandes ou de revente !
-Si vous avez obtenu ce plugin via un canal payant, ou si vous trouvez quelqu'un revendant des plans créés avec celui-ci, veuillez **demander un remboursement immédiatement et signaler le vendeur**.
-
-**Le savoir est gratuit. Respectez les créateurs originaux. Dites NON à la revente !**
+Cet outil a pour but d'aider les joueurs à sauvegarder leurs propres agencements de logement et à partager gratuitement des plans dans la communauté. Les réalisations communautaires ne doivent pas être exploitées à des fins lucratives. Si vous avez obtenu cet outil via un canal payant, nous vous recommandons de demander un remboursement et de signaler le vendeur.
 
 ---
 
 ### ✨ Introduction
 
-**AlmondHousing** est un plugin d'amélioration du logement FFXIV, profondément reconstruit et optimisé à partir de [DisPlace](https://github.com/Drakansoul/DisPlace), et maintenu indépendamment par **AlmondCookie**. Il est dédié à rendre la décoration de logement complexe, la gestion des matériaux et le partage de données plus geek, pur et simple.
+**AlmondHousing** est un outil d'assistance au logement pour FFXIV, né de l'exploration et de l'accumulation des projets de prédécesseurs de la communauté, et maintenu indépendamment par **AlmondCookie**. Il vise à offrir quelques commodités supplémentaires aux joueurs qui en ont besoin, dans le cadre autorisé par le jeu.
 
-**Caractéristiques principales :**
-* 🌍 **Support multilingue transparent** : Support natif du français, de l'anglais, du chinois (Simp/Trad), du japonais, du coréen et de l'allemand pour répondre à tous les environnements de jeu.
-* 📦 **Inventaire intelligent des matériaux** : Analyse automatiquement votre inventaire et votre sacoche de chocobo, les compare en temps réel avec l'agencement actuel et calcule exactement les meubles qui vous "manquent".
-* 📊 **Exportation avancée de listes** : Exportation en un clic pour les **listes d'achat Teamcraft** (les meubles déjà possédés sont filtrés) ou des tableaux CSV avec des données détaillées sur les surplus et les manques.
-* 🏗️ **Compatibilité et protection des agencements** : Rétrocompatibilité parfaite pour lire les plans `.json` de MakePlace et ReMakePlace ; supporte également l'enregistrement au format crypté exclusif `.almond` utilisant l'algorithme ChaCha20-Poly1305 pour empêcher toute falsification et vol.
+**Fonctionnalités principales :**
+* 🌍 **Support multilingue** — Prise en charge native du chinois (simplifié/traditionnel), de l'anglais, du japonais, du coréen, de l'allemand et du français
+* 📦 **Inventaire des matériaux** — Analyse automatique de l'inventaire et de la sacoche de chocobo, comparaison en temps réel avec le plan actuel et calcul précis des éléments manquants
+* 📊 **Export de listes** — Export en un clic vers des listes d'achat Teamcraft ou des tableaux CSV
+* 🔐 **Compatibilité des plans** — Lit les plans .json de MakePlace et ReMakePlace, prend en charge l'enregistrement au format .almond
 
 ---
 
 ### 🚀 Installation
 
-1. **Prérequis** : Vous devez utiliser le [Dalamud / FFXIV Quick Launcher](https://goatcorp.github.io/) pour lancer le jeu.
-2. Tapez `/xlsettings` dans le chat du jeu pour ouvrir les paramètres de Dalamud.
-3. Accédez à l'onglet **"Experimental" (Expérimental)**.
-4. Ajoutez le lien suivant dans la section **"Custom Plugin Repositories" (Dépôts de plugins personnalisés)** :
-   `https://raw.githubusercontent.com/hyirax/AlmondHousing/master/pluginmaster.json`
-5. Cliquez sur l'icône **+**, assurez-vous que **"Enabled" (Activé)** est coché, puis cliquez sur "Save and Close" (Sauvegarder et fermer).
-6. Recherchez **`AlmondHousing`** dans l'installateur `/xlplugins` et installez-le.
+1. Lancer le jeu avec [Dalamud / FFXIV Quick Launcher](https://goatcorp.github.io/)
+2. Taper /xlsettings dans le chat pour ouvrir les paramètres Dalamud
+3. Passer à l'onglet **« Expérimental »**
+4. Ajouter dans **« Dépôts de plugins personnalisés »** :
+   https://raw.githubusercontent.com/hyirax/AlmondHousing/master/pluginmaster.json
+5. Cliquer sur **+**, cocher **« Activé »**, puis enregistrer et fermer
+6. Rechercher **AlmondHousing** dans /xlplugins pour installer
 
 ---
 
-### 🎮 Guide de démarrage rapide
+### 📋 Démarrage rapide
 
-Tapez **`/almond`** dans le chat pour ouvrir le panneau de contrôle.
+Taper **/almond** dans le chat pour ouvrir le panneau.
 
-1. **Sauvegarder un agencement** : Entrez dans une maison où vous avez les permissions, activez le mode intégré "Rotation" (Rotate Furniture), et cliquez sur `Sauvegarder sous (Save As)` pour sauvegarder les données actuelles de la maison.
-2. **Préparer les matériaux** : Cliquez sur l'onglet `Inventaire (Material Audit)` pour voir quels meubles manquent et exportez la liste pour des achats précis.
-3. **Appliquer un agencement** : Placez les meubles requis dans votre inventaire ou sur le sol, puis cliquez sur `Sélectionner un fichier et appliquer (Select File & Apply)`. Le plugin positionnera tout automatiquement.
+1. **Sauvegarder un agencement** — Entrer dans une maison avec autorisation, activer le mode rotation et cliquer sur Enregistrer sous
+2. **Préparer les matériaux** — Passer à l'onglet Inventaire pour vérifier les éléments manquants, exporter la liste pour des achats précis
+3. **Appliquer un agencement** — Placer les meubles requis dans l'inventaire ou au sol, puis cliquer sur Sélectionner un fichier et appliquer
 
-*(Remarque : NE BOUGEZ PAS votre souris et ne laissez pas votre personnage bloquer le chemin de déplacement des meubles pendant le placement automatique afin d'éviter les crashs du jeu.)*
+*(Pendant le placement automatique, veuillez ne pas bouger la souris ni bloquer le passage des meubles avec votre personnage)*
+
+---
+
+### 🙏 Remerciements
+
+Ce projet n'aurait pas été possible sans l'exploration et l'accumulation de nombreux pionniers de la communauté :
+
+* **Drakansoul** — Création et maintenance de DisPlace
+* **NotNite** — A facilité la mise à disposition publique du code du plugin MakePlace conformément aux directives applicables
+* **jawslouis** — Création du remarquable MakePlacePlugin
+* Remerciements particuliers à **HousingPos**, **BDTH**, **HouseMate** et autres prédécesseurs techniques pour leur inspiration
 
 ---
 
-### 💖 Remerciements
-
-Ce projet a été reconstruit et optimisé sur la base des excellents projets open-source suivants. Merci aux développeurs :
-
-* **Drakansoul** : Pour la création et la maintenance de DisPlace.
-* **NotNite** : Pour avoir forcé la réouverture du code source du plugin MakePlace.
-* **jawslouis** : Pour avoir créé le remarquable MakePlacePlugin.
-* Remerciements particuliers à **HousingPos**, **BDTH** et **HouseMate** pour l'inspiration technique apportée par leurs travaux.
-
----
-*Si vous trouvez ce plugin utile, n'hésitez pas à donner une ⭐️ Star à ce projet sur GitHub !*
+*Si cet outil vous a été utile, une ⭐️ Star serait très appréciée !*
