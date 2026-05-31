@@ -1,4 +1,4 @@
-using Dalamud.Game.Command;
+﻿using Dalamud.Game.Command;
 using Dalamud.Plugin;
 using Lumina.Excel.Sheets;
 using AlmondHousing.Objects;
@@ -439,7 +439,17 @@ namespace AlmondHousing
             if (row.Equals(null)) return;
 
             var placeName = row.Name.ToString();
-            PlotLocation = Plots.Map[placeName][plotNumber];
+            var plotKey = plotNumber.ToString();
+            if (Plots.Map.TryGetValue(placeName, out var plotDict) &&
+                plotDict.TryGetValue(plotKey, out var loc))
+            {
+                PlotLocation = loc;
+            }
+            else
+            {
+                LogError($"Plot location not found: area={placeName}, plot={plotKey}");
+                PlotLocation = new Location();
+            }
         }
 
         public void LoadExterior()

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Text.Json;
@@ -27,9 +27,9 @@ namespace AlmondHousing.Util
 
     class Plots
     {
-        private static Dictionary<string, Dictionary<int, Location>> _map;
+        private static Dictionary<string, Dictionary<string, Location>> _map;
 
-        public static Dictionary<string, Dictionary<int, Location>> Map
+        public static Dictionary<string, Dictionary<string, Location>> Map
         {
             get
             {
@@ -40,13 +40,13 @@ namespace AlmondHousing.Util
                     {
                         var json = File.ReadAllText(path);
                         var opts = new JsonSerializerOptions { IncludeFields = true };
-                        _map = JsonSerializer.Deserialize<Dictionary<string, Dictionary<int, Location>>>(json, opts)
-                               ?? new Dictionary<string, Dictionary<int, Location>>();
+                        _map = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Location>>>(json, opts)
+                               ?? new Dictionary<string, Dictionary<string, Location>>();
                     }
                     else
                     {
                         DalamudApi.PluginLog.Error("plots.json not found!");
-                        _map = new Dictionary<string, Dictionary<int, Location>>();
+                        _map = new Dictionary<string, Dictionary<string, Location>>();
                     }
                 }
                 return _map;
