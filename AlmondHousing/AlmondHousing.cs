@@ -436,7 +436,7 @@ namespace AlmondHousing
 
             var territoryId = Memory.Instance.GetTerritoryTypeId();
             TerritoryType row = DalamudApi.DataManager.GetExcelSheet<TerritoryType>().GetRow(territoryId);
-            if (row.Equals(null)) return;
+            if (row.RowId == 0) return;
 
             var placeName = row.Name.ToString();
             var plotKey = plotNumber.ToString();
@@ -530,7 +530,7 @@ namespace AlmondHousing
                 var furniture = DalamudApi.DataManager.GetExcelSheet<HousingFurniture>().GetRow(furnitureKey);
                 Item item = furniture.Item.Value;
 
-                if (item.Equals(null) || item.RowId == 0) continue;
+                if (item.RowId == 0) continue;
                 if (!IsSelectedFloor(gameObject.Y)) continue;
 
                 var housingItem = new HousingItem(item, gameObject);
@@ -560,7 +560,7 @@ namespace AlmondHousing
                 var furniture = DalamudApi.DataManager.GetExcelSheet<HousingYardObject>().GetRow(furnitureKey);
                 Item item = furniture.Item.Value;
 
-                if (item.Equals(null) || item.RowId == 0) continue;
+                if (item.RowId == 0) continue;
 
                 var housingItem = new HousingItem(item, gameObject);
                 housingItem.ItemStruct = (nint)gameObject.Item;

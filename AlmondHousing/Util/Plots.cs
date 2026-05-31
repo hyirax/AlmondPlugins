@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace AlmondHousing.Util
 {
-    struct Location
+    public class Location
     {
         public float x { get; set; }
         public float y { get; set; }
@@ -13,6 +13,8 @@ namespace AlmondHousing.Util
         public float rotation { get; set; }
         public string size { get; set; } = "";
         public string entranceLayout { get; set; } = "";
+
+        public Location() { }
 
         public Location(float _x, float _y, float _z, float rot, string _size, string layout)
         {
@@ -35,12 +37,11 @@ namespace AlmondHousing.Util
             {
                 if (_map == null)
                 {
-                    var path = Path.Combine(AlmondHousing.PluginDirectory, "Data", "plots.json");
-                    if (File.Exists(path))
+                    var diskPath = Path.Combine(AlmondHousing.PluginDirectory, "Data", "plots.json");
+                    var json = EmbeddedResource.ReadAllText("AlmondHousing.Data.plots.json", diskPath);
+                    if (!string.IsNullOrEmpty(json))
                     {
-                        var json = File.ReadAllText(path);
-                        var opts = new JsonSerializerOptions { IncludeFields = true };
-                        _map = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Location>>>(json, opts)
+                        _map = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Location>>>(json)
                                ?? new Dictionary<string, Dictionary<string, Location>>();
                     }
                     else

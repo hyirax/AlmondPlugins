@@ -42,12 +42,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="loc.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="Data\plots.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None></ItemGroup>
+        <EmbeddedResource Include="loc.json" />
+        <EmbeddedResource Include="Data\plots.json" />
+    </ItemGroup>
 
     <ItemGroup>
         <Reference Include="Newtonsoft.Json">

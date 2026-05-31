@@ -219,9 +219,9 @@ namespace AlmondHousing
             var ItemSheet = DalamudApi.DataManager.GetExcelSheet<Item>();
             var itemRow = ItemSheet.FirstOrNull(row => row.Name.ToString().Equals(furniture.name));
 
-            if (itemRow.Equals(null)) itemRow = ItemSheet.FirstOrDefault(row => row.RowId == furniture.itemId);
+            if (itemRow == null) itemRow = ItemSheet.FirstOrDefault(row => row.RowId == furniture.itemId);
 
-            if (itemRow.Equals(null)) return null;
+            if (itemRow == null) return null;
 
             var r = furniture.transform.rotation;
             var quat = new Quaternion(r[0], r[1], r[2], r[3]);
@@ -474,7 +474,7 @@ namespace AlmondHousing
             var territoryId = Memory.Instance.GetTerritoryTypeId();
             var row = DalamudApi.DataManager.GetExcelSheet<TerritoryType>().GetRow(territoryId);
 
-            if (row.Equals(null))
+            if (row.RowId != 0)
             {
                 var placeName = row.Name.ToString();
 
@@ -543,7 +543,7 @@ namespace AlmondHousing
                 else if (gameObject.MaterialItemKey != 0)
                 {
                     var item = DalamudApi.DataManager.GetExcelSheet<Item>().GetRow(gameObject.MaterialItemKey);
-                    if (!item.Equals(null))
+                    if (item.RowId != 0)
                     {
                         var basicItem = new BasicItem();
                         basicItem.name = item.Name.ToString();

@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using AlmondHousing.Util;
 using Newtonsoft.Json;
 
 namespace AlmondHousing
@@ -13,16 +14,16 @@ namespace AlmondHousing
 
         public void LoadAllLanguages(string pluginDirectory)
         {
-            string filePath = Path.Combine(pluginDirectory, "loc.json");
-            if (File.Exists(filePath))
+            try
             {
-                try
+                string json = EmbeddedResource.ReadAllText("AlmondHousing.loc.json",
+                    Path.Combine(pluginDirectory, "loc.json"));
+                if (!string.IsNullOrEmpty(json))
                 {
-                    string json = File.ReadAllText(filePath);
                     _allTranslations = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json) ?? new();
                 }
-                catch { } 
             }
+            catch { }
         }
 
         public void SetLanguage(string langCode)

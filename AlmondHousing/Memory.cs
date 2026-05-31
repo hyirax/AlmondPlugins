@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -105,7 +105,7 @@ namespace AlmondHousing
         {
             var territoryId = GetTerritoryTypeId();
             var row = DalamudApi.DataManager.GetExcelSheet<TerritoryType>().GetRow(territoryId);
-            if (row.Equals(null)) return null;
+            if (row.RowId == 0) return null;
             var placeName = row.Name.ToString();
             if (string.IsNullOrEmpty(placeName) || placeName.Length < 4) return null;
             var sizeName = placeName.Substring(2, 2);
@@ -228,7 +228,7 @@ namespace AlmondHousing
         public unsafe HousingArea GetCurrentTerritory()
         {
             var territoryRow = DalamudApi.DataManager.GetExcelSheet<TerritoryType>().GetRow(GetTerritoryTypeId());
-            if (territoryRow.Equals(null) || territoryRow.Name.ToString().Equals("r1i5")) return HousingArea.None;
+            if (territoryRow.RowId == 0 || territoryRow.Name.ToString().Equals("r1i5")) return HousingArea.None;
             if (territoryRow.Name.ToString().Equals("h1m2")) return HousingArea.Island;
             if (HousingModule == null) return HousingArea.None;
             return HousingModule->IsOutdoors() ? HousingArea.Outdoors : HousingArea.Indoors;
