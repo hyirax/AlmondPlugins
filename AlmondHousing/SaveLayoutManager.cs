@@ -517,6 +517,7 @@ namespace AlmondHousing
         void RecordFurniture(List<Furniture> furnitureList, List<HousingItem> itemList)
         {
             HousingData Data = HousingData.Instance;
+            var itemSheet = DalamudApi.DataManager.GetExcelSheet<Item>();
             furnitureList.Clear();
             foreach (HousingItem gameObject in itemList)
             {
@@ -542,7 +543,7 @@ namespace AlmondHousing
                 }
                 else if (gameObject.MaterialItemKey != 0)
                 {
-                    var item = DalamudApi.DataManager.GetExcelSheet<Item>().GetRow(gameObject.MaterialItemKey);
+                    var item = itemSheet.GetRow(gameObject.MaterialItemKey);
                     if (!item.Equals(null))
                     {
                         var basicItem = new BasicItem();
@@ -563,7 +564,7 @@ namespace AlmondHousing
         public void ExportLayout()
         {
 
-            if (Directory.Exists(Config.SaveLocation))
+            if (string.IsNullOrEmpty(Config.SaveLocation))
             {
                 // 💡 修复：套上 Lang.GetText
                 throw new Exception(Lang.GetText("Save file not specified"));
@@ -603,3 +604,4 @@ namespace AlmondHousing
 
     }
 }
+

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Dalamud.NET.Sdk/15.0.0">
 
     <PropertyGroup>
-        <PluginVersion>1.1.0</PluginVersion>
+        <PluginVersion>1.1.1</PluginVersion>
         <TargetFramework>net10.0-windows7.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         
@@ -9,9 +9,9 @@
         
         <AssemblyTitle>AlmondHousing</AssemblyTitle>
         <Product>AlmondHousing</Product>
-        <Version>1.1.0.0</Version>
+        <Version>1.1.1.0</Version>
         <FileVersion>$(PluginVersion)</FileVersion>
-        <AssemblyVersion>1.1.0.0</AssemblyVersion>
+        <AssemblyVersion>1.1.1.0</AssemblyVersion>
         <OutputPath>..\bin\</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ProduceReferenceAssembly>false</ProduceReferenceAssembly>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +11,11 @@ namespace AlmondHousing
     {
         public int Version { get; set; } = 0;
 
-        // 🚀 【必须新增的这一行】：用于永久保存防倒卖系统的解锁状态
+        // 馃殌 銆愬繀椤绘柊澧炵殑杩欎竴琛屻€戯細鐢ㄤ簬姘镐箙淇濆瓨闃插€掑崠绯荤粺鐨勮В閿佺姸鎬?
         public bool IsActivated { get; set; } = false;
 
-        // 用于保存玩家选择的语言，默认设为 "zh" (中文)
-        public string UILanguage { get; set; } = "zh"; // 默认使用简体中文
+        // 鐢ㄤ簬淇濆瓨鐜╁閫夋嫨鐨勮瑷€锛岄粯璁よ涓?"zh" (涓枃)
+        public string UILanguage { get; set; } = "zh"; // 榛樿浣跨敤绠€浣撲腑鏂?
         
         public bool ShowTooltips = true;
         public bool DrawScreen = false;
@@ -31,9 +31,9 @@ namespace AlmondHousing
         public bool ApplyLayout = true;
         public bool EnableQuantumPlace = false;
         public bool AbsoluteSnap = false;
-        public bool UseGizmo = false;    // 是否在屏幕上显示 3D 拖拽轴
-        public bool DoSnap = false;      // 是否开启拖拽吸附
-        public float Drag = 0.05f;       // 鼠标滚轮/拖拽的微调精度
+        public bool UseGizmo = false;    // 鏄惁鍦ㄥ睆骞曚笂鏄剧ず 3D 鎷栨嫿杞?
+        public bool DoSnap = false;      // 鏄惁寮€鍚嫋鎷藉惛闄?
+        public float Drag = 0.05f;       // 榧犳爣婊氳疆/鎷栨嫿鐨勫井璋冪簿搴?
 
         public string SaveLocation = null;
 
@@ -46,11 +46,11 @@ namespace AlmondHousing
             _saveCts?.Cancel();
             _saveCts = new CancellationTokenSource();
             var cts = _saveCts;
-            Task.Delay(SaveDebounceInterval, cts.Token).ContinueWith(_ =>
+            Task.Delay(SaveDebounceInterval, cts.Token).ContinueWith(t =>
             {
-                if (!cts.IsCancellationRequested)
+                if (!cts.IsCancellationRequested && !t.IsFaulted)
                     DalamudApi.PluginInterface.SavePluginConfig(this);
-            }, TaskContinuationOptions.NotOnCanceled);
+            }, TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted);
         }
 
         public void ResetRecord()
@@ -61,3 +61,5 @@ namespace AlmondHousing
         }
     }
 }
+
+

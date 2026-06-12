@@ -50,3 +50,4 @@ D:\Backup\Documents\GitHub\AlmondHousing拆分重构\bin\AlmondHousing.deps.json
 D:\Backup\Documents\GitHub\AlmondHousing拆分重构\bin\AlmondHousing.dll
 D:\Backup\Documents\GitHub\AlmondHousing拆分重构\bin\AlmondHousing.pdb
 D:\Backup\Documents\GitHub\AlmondHousing拆分重构\AlmondHousing\obj\Release\AlmondHo.542989BC.Up2Date
+D:\Backup\Documents\GitHub\AlmondHousing\bin\Data\plots.json
