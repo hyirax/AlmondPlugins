@@ -153,7 +153,7 @@ namespace AlmondHousing.Gui
                 var contentPos = ImGui.GetCursorScreenPos();
                 var clipMin = contentPos;
                 var clipMax = contentPos + new Vector2(ImGui.GetContentRegionAvail().X, estimatedHeight);
-                ImGui.PushClipRect(clipMin, clipMax, true);
+                // ImGui.PushClipRect(clipMin, clipMax, true); // FIXED: removed to prevent UI collapse
             }
 
             return progress > 0.99f;
@@ -179,4 +179,5 @@ namespace AlmondHousing.Gui
         public void Dispose() { if (_count > 0) ImGui.PopStyleVar(_count); }
     }
 }
+
 
