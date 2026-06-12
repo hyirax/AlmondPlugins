@@ -1,4 +1,4 @@
-using Dalamud.Interface;
+﻿using Dalamud.Interface;
 using Dalamud.Bindings.ImGui;
 using AlmondHousing.Util;
 using System;
@@ -179,3 +179,4 @@ namespace AlmondHousing.Gui
         public void Dispose() { if (_count > 0) ImGui.PopStyleVar(_count); }
     }
 }
+
