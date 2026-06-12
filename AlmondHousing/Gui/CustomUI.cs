@@ -111,53 +111,31 @@ namespace AlmondHousing.Gui
                 _headerAnim[id] = progress = open ? 1f : 0f;
 
             float target = open ? 1f : 0f;
-            progress += (target - progress) * (ImGui.GetIO().DeltaTime * HeaderAnimSpeed);
-            if (Math.Abs(progress - target) < 0.001f) progress = target;
+            float delta = ImGui.GetIO().DeltaTime * HeaderAnimSpeed;
+            progress = Math.Abs(progress - target) < 0.001f ? target : progress + (target - progress) * delta;
             _headerAnim[id] = progress;
 
-            var pos = ImGui.GetCursorScreenPos();
-            var drawList = ImGui.GetWindowDrawList();
-            float headerHeight = 28f;
-            Vector2 headerSize = new Vector2(ImGui.GetContentRegionAvail().X, headerHeight);
-            bool hovered = ImGui.IsMouseHoveringRect(pos, pos + headerSize);
-            bool clicked = hovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
-
-            if (clicked) open = !open;
-
-            // Header background
-            float bgAlpha = hovered ? 0.10f : 0.04f;
-            drawList.AddRectFilled(pos, pos + headerSize, ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, bgAlpha)), 4f);
-
-            // Arrow: triangle that rotates from right (closed) to down (open)
+            // Draw arrow: rotates from right (closed) to down (open)
             float arrowAngle = progress * (float)Math.PI * 0.5f;
-            var arrowCenter = pos + new Vector2(14f, headerHeight / 2);
+            var drawList = ImGui.GetWindowDrawList();
+            var arrowCenter = ImGui.GetCursorScreenPos() + new Vector2(14f, 14f);
             float aLen = 5f;
             float cosA = (float)Math.Cos(arrowAngle);
             float sinA = (float)Math.Sin(arrowAngle);
             Vector2 Rot(Vector2 v) => new(v.X * cosA - v.Y * sinA, v.X * sinA + v.Y * cosA);
-            Vector2 p1 = Rot(new Vector2(aLen, 0));       // tip (right when closed)
-            Vector2 p2 = Rot(new Vector2(-aLen, -aLen));  // top arm
-            Vector2 p3 = Rot(new Vector2(-aLen, aLen));   // bottom arm
-            var arrowU32 = ImGui.ColorConvertFloat4ToU32(new Vector4(0.75f, 0.75f, 0.75f, 1f));
-            drawList.AddTriangleFilled(arrowCenter + p1, arrowCenter + p2, arrowCenter + p3, arrowU32);
+            drawList.AddTriangleFilled(
+                arrowCenter + Rot(new Vector2(aLen, 0)),
+                arrowCenter + Rot(new Vector2(-aLen, -aLen)),
+                arrowCenter + Rot(new Vector2(-aLen, aLen)),
+                ImGui.ColorConvertFloat4ToU32(new Vector4(0.75f, 0.75f, 0.75f, 1f)));
 
-            // Label
-            drawList.AddText(pos + new Vector2(26f, 5f), ImGui.ColorConvertFloat4ToU32(new Vector4(0.9f, 0.9f, 0.9f, 1f)), label);
-
-            // Move cursor past header
-            ImGui.SetCursorScreenPos(pos + new Vector2(0, headerHeight + 2f));
-
-            // Clip content during animation
-            if (progress > 0.001f)
-            {
-                var contentPos = ImGui.GetCursorScreenPos();
-                var clipMin = contentPos;
-                var clipMax = contentPos + new Vector2(ImGui.GetContentRegionAvail().X, estimatedHeight);
-                // ImGui.PushClipRect(clipMin, clipMax, true); // FIXED: removed to prevent UI collapse
-            }
+            ImGui.SetCursorPosX(26f);
+            if (ImGui.Selectable(label + "##" + id, open ? true : false, ImGuiSelectableFlags.None, new Vector2(0, 28f)))
+                open = !open;
 
             return progress > 0.99f;
         }
+
     }
 
     public struct ScopedColor : IDisposable
