@@ -139,7 +139,19 @@
     "UndoBtn": "撤销",
     "RedoBtn": "重做",
     "UndoHelp": "(快捷键: Ctrl+Z/Y)",
-    "Select a Layout File": "选择布局文件"
+    "Select a Layout File": "选择布局文件",
+    "Roof": "??",
+    "Exterior Wall": "??",
+    "Window": "??",
+    "Door": "?",
+    "Roof Decor": "????",
+    "Exterior Wall Decor": "????",
+    "Placard": "??",
+    "Fence": "??",
+    "Wall": "??",
+    "Floor": "??",
+    "Light": "??",
+    "Main": "???"
   },
   "zh_TW": {
     "Home": "首頁",
@@ -281,7 +293,19 @@
     "UndoBtn": "撤銷",
     "RedoBtn": "重做",
     "UndoHelp": "(快捷鍵: Ctrl+Z/Y)",
-    "Select a Layout File": "選擇佈局文件"
+    "Select a Layout File": "選擇佈局文件",
+    "Roof": "??",
+    "Exterior Wall": "??",
+    "Window": "??",
+    "Door": "?",
+    "Roof Decor": "????",
+    "Exterior Wall Decor": "????",
+    "Placard": "??",
+    "Fence": "??",
+    "Wall": "??",
+    "Floor": "??",
+    "Light": "??",
+    "Main": "???"
   },
   "en": {
     "Home": "Home",
@@ -423,7 +447,19 @@
     "UndoBtn": "Undo",
     "RedoBtn": "Redo",
     "UndoHelp": "(Keys: Ctrl+Z/Y)",
-    "Select a Layout File": "Select a Layout File"
+    "Select a Layout File": "Select a Layout File",
+    "Roof": "Roof",
+    "Exterior Wall": "Exterior Wall",
+    "Window": "Window",
+    "Door": "Door",
+    "Roof Decor": "Roof Decor",
+    "Exterior Wall Decor": "Exterior Wall Decor",
+    "Placard": "Placard",
+    "Fence": "Fence",
+    "Wall": "Wall",
+    "Floor": "Floor",
+    "Light": "Light",
+    "Main": "Main"
   },
   "ja": {
     "Home": "ホーム",
@@ -565,7 +601,19 @@
     "UndoBtn": "元に戻す",
     "RedoBtn": "やり直す",
     "UndoHelp": "(キー: Ctrl+Z/Y)",
-    "Select a Layout File": "レイアウトファイルを選択"
+    "Select a Layout File": "レイアウトファイルを選択",
+    "Roof": "??",
+    "Exterior Wall": "??",
+    "Window": "?",
+    "Door": "??",
+    "Roof Decor": "????",
+    "Exterior Wall Decor": "????",
+    "Placard": "??",
+    "Fence": "????",
+    "Wall": "?",
+    "Floor": "?",
+    "Light": "??",
+    "Main": "???"
   },
   "ko": {
     "Home": "홈",
@@ -707,7 +755,19 @@
     "UndoBtn": "실행 취소",
     "RedoBtn": "다시 실행",
     "UndoHelp": "(단축키: Ctrl+Z/Y)",
-    "Select a Layout File": "레이아웃 파일 선택"
+    "Select a Layout File": "레이아웃 파일 선택",
+    "Roof": "??",
+    "Exterior Wall": "??",
+    "Window": "??",
+    "Door": "?",
+    "Roof Decor": "?? ??",
+    "Exterior Wall Decor": "?? ??",
+    "Placard": "??",
+    "Fence": "???",
+    "Wall": "?",
+    "Floor": "??",
+    "Light": "??",
+    "Main": "??"
   },
   "de": {
     "Home": "Startseite",
@@ -849,7 +909,19 @@
     "UndoBtn": "Rückgängig",
     "RedoBtn": "Wiederholen",
     "UndoHelp": "(Tasten: Strg+Z/Y)",
-    "Select a Layout File": "Layout-Datei auswählen"
+    "Select a Layout File": "Layout-Datei auswählen",
+    "Roof": "Dach",
+    "Exterior Wall": "Au?enwand",
+    "Window": "Fenster",
+    "Door": "T?r",
+    "Roof Decor": "Dachdeko",
+    "Exterior Wall Decor": "Au?enwanddeko",
+    "Placard": "T?rschild",
+    "Fence": "Zaun",
+    "Wall": "Wand",
+    "Floor": "Boden",
+    "Light": "Licht",
+    "Main": "Haupt"
   },
   "fr": {
     "Home": "Accueil",
@@ -991,6 +1063,18 @@
     "UndoBtn": "Annuler",
     "RedoBtn": "Rétablir",
     "UndoHelp": "(Touches: Ctrl+Z/Y)",
-    "Select a Layout File": "Sélectionner un fichier de disposition"
+    "Select a Layout File": "Sélectionner un fichier de disposition",
+    "Roof": "Toit",
+    "Exterior Wall": "Mur ext?rieur",
+    "Window": "Fen?tre",
+    "Door": "Porte",
+    "Roof Decor": "D?co de toit",
+    "Exterior Wall Decor": "D?co mur ext?rieur",
+    "Placard": "Plaque",
+    "Fence": "Cl?ture",
+    "Wall": "Mur",
+    "Floor": "Sol",
+    "Light": "Lumi?re",
+    "Main": "Principal"
   }
 }

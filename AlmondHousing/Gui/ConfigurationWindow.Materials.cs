@@ -210,7 +210,7 @@ namespace AlmondHousing.Gui
             {
                 if (!itemSheet.HasRow(housingItem.ItemKey)) continue;
                 var itemRow = itemSheet.GetRow(housingItem.ItemKey);
-                string dyeName = (housingItem.Stain != 0 && stainSheet.HasRow(housingItem.Stain)) ? stainSheet.GetRow(housingItem.Stain).Name.ToString() : "";
+                string dyeName = housingItem.Stain != 0 ? Util.StainNameProvider.GetName(housingItem.Stain, AlmondHousing.Lang.CurrentLanguage) : "";
                 string uniqueKey = $"{itemRow.RowId}_{dyeName}";
                 
                 if (results.ContainsKey(uniqueKey)) 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,15 +14,15 @@ namespace AlmondHousing
         {
             return partsType switch
             {
-                ExteriorPartsType.Roof => "Roof",
-                ExteriorPartsType.Walls => "Exterior Wall",
-                ExteriorPartsType.Windows => "Window",
-                ExteriorPartsType.Door => "Door",
-                ExteriorPartsType.RoofOpt => "Roof Decor",
-                ExteriorPartsType.WallOpt => "Exterior Wall Decor",
-                ExteriorPartsType.SignOpt => "Placard",
-                ExteriorPartsType.Fence => "Fence",
-                _ => "Unknown"
+                ExteriorPartsType.Roof => AlmondHousing.Lang.GetText("Roof"),
+                ExteriorPartsType.Walls => AlmondHousing.Lang.GetText("Exterior Wall"),
+                ExteriorPartsType.Windows => AlmondHousing.Lang.GetText("Window"),
+                ExteriorPartsType.Door => AlmondHousing.Lang.GetText("Door"),
+                ExteriorPartsType.RoofOpt => AlmondHousing.Lang.GetText("Roof Decor"),
+                ExteriorPartsType.WallOpt => AlmondHousing.Lang.GetText("Exterior Wall Decor"),
+                ExteriorPartsType.SignOpt => AlmondHousing.Lang.GetText("Placard"),
+                ExteriorPartsType.Fence => AlmondHousing.Lang.GetText("Fence"),
+                _ => AlmondHousing.Lang.GetText("Unknown")
             };
         }
 
@@ -30,12 +30,12 @@ namespace AlmondHousing
         {
             return partsType switch
             {
-                InteriorPartsType.Walls => "Wall",
-                InteriorPartsType.Windows => "Window",
-                InteriorPartsType.Door => "Door",
-                InteriorPartsType.Floor => "Floor",
-                InteriorPartsType.Light => "Light",
-                _ => "Unknown"
+                InteriorPartsType.Walls => AlmondHousing.Lang.GetText("Wall"),
+                InteriorPartsType.Windows => AlmondHousing.Lang.GetText("Window"),
+                InteriorPartsType.Door => AlmondHousing.Lang.GetText("Door"),
+                InteriorPartsType.Floor => AlmondHousing.Lang.GetText("Floor"),
+                InteriorPartsType.Light => AlmondHousing.Lang.GetText("Light"),
+                _ => AlmondHousing.Lang.GetText("Unknown")
             };
         }
 
@@ -43,11 +43,11 @@ namespace AlmondHousing
         {
             return floor switch
             {
-                InteriorFloor.Ground => "Ground Floor",
-                InteriorFloor.Basement => "Basement",
-                InteriorFloor.Upstairs => "Upper Floor",
-                InteriorFloor.External => "Main",
-                _ => "Unknown"
+                InteriorFloor.Ground => AlmondHousing.Lang.GetText("Ground Floor"),
+                InteriorFloor.Basement => AlmondHousing.Lang.GetText("Basement"),
+                InteriorFloor.Upstairs => AlmondHousing.Lang.GetText("Upper Floor"),
+                InteriorFloor.External => AlmondHousing.Lang.GetText("Main"),
+                _ => AlmondHousing.Lang.GetText("Unknown")
             };
         }
 
@@ -56,12 +56,11 @@ namespace AlmondHousing
             return Distance(new Vector3(playerPos.X, playerPos.Y, playerPos.Z), new Vector3(obj.X, obj.Y, obj.Z));
         }
 
-        public static double FastDistance(Vector3 v1, Vector3 v2) // for comparison, when actual distance doesn't matter
+        public static double FastDistance(Vector3 v1, Vector3 v2)
         {
             var x1 = Math.Pow(v2.X - v1.X, 2);
             var y1 = Math.Pow(v2.Y - v1.Y, 2);
             var z1 = Math.Pow(v2.Z - v1.Z, 2);
-
             return x1 + y1 + z1;
         }
 
@@ -73,13 +72,12 @@ namespace AlmondHousing
         public static void StainButton(string id, Stain color, Vector2 size)
         {
             var floatColor = StainToVector4(color.Color);
-            ImGui.ColorButton($"##{id}", floatColor, ImGuiColorEditFlags.NoTooltip, size);
+            ImGui.ColorButton("##" + id, floatColor, ImGuiColorEditFlags.NoTooltip, size);
         }
 
         public static Vector4 StainToVector4(uint stainColor)
         {
             var s = 1.0f / 255.0f;
-
             return new Vector4()
             {
                 X = ((stainColor >> 16) & 0xFF) * s,
