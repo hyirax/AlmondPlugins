@@ -20,7 +20,7 @@ namespace AlmondHousing.Util
                 {
                     if (row.RowId == 0) continue;
                     var name = row.Name.ToString();
-                    if (!string.IsNullOrEmpty(name) && !dict.ContainsKey(row.RowId))
+                    if (!string.IsNullOrEmpty(name))
                         dict[row.RowId] = name;
                 }
             }
@@ -31,24 +31,18 @@ namespace AlmondHousing.Util
             Load(_namesFr, Dalamud.Game.ClientLanguage.French);
         }
 
-        /// <summary>
-        /// Returns the stain name in the given language code (zh, en, ja, ko, de, fr, zh_TW).
-        /// Falls back to English for unsupported languages.
-        /// </summary>
         public static string GetName(uint stainId, string langCode)
         {
             return langCode switch
             {
-                "ja" => _namesJa.TryGetValue(stainId, out var j) ? j : GetFallback(stainId),
-                "de" => _namesDe.TryGetValue(stainId, out var d) ? d : GetFallback(stainId),
-                "fr" => _namesFr.TryGetValue(stainId, out var f) ? f : GetFallback(stainId),
-                _ => GetFallback(stainId),
+                "zh"     => _namesJa.TryGetValue(stainId, out var z) ? z : _namesEn.GetValueOrDefault(stainId, "???"),
+                "zh_TW"  => _namesJa.TryGetValue(stainId, out var t) ? t : _namesEn.GetValueOrDefault(stainId, "???"),
+                "ko"     => _namesJa.TryGetValue(stainId, out var k) ? k : _namesEn.GetValueOrDefault(stainId, "???"),
+                "ja"     => _namesJa.TryGetValue(stainId, out var j) ? j : _namesEn.GetValueOrDefault(stainId, "???"),
+                "de"     => _namesDe.TryGetValue(stainId, out var d) ? d : _namesEn.GetValueOrDefault(stainId, "???"),
+                "fr"     => _namesFr.TryGetValue(stainId, out var f) ? f : _namesEn.GetValueOrDefault(stainId, "???"),
+                _        => _namesEn.TryGetValue(stainId, out var e) ? e : "???",
             };
-        }
-
-        private static string GetFallback(uint stainId)
-        {
-            return _namesEn.TryGetValue(stainId, out var e) ? e : "Unknown";
         }
     }
 }
