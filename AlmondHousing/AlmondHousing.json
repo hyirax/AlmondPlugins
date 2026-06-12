@@ -1,21 +1,21 @@
-﻿{
+{
   "Author": "AlmondCookie",
   "Name": "AlmondHousing",
   "InternalName": "AlmondHousing",
   "AssemblyVersion": "1.1.1.0",
-  "Description": "AlmondHousing (鏉忎粊鎴垮眿宸ュ叿) 鏄熀浜?DisPlace 娣卞害閲嶆瀯鐨?FF14 鎴垮眿瑁呬慨澧炲己鎻掍欢銆俓n\n鏍稿績鍔熻兘锛歕n- 鍏ㄧ悆棣栧彂 6 鍥借瑷€鏀寔锛氫腑锛堢畝/绻侊級銆佽嫳銆佹棩銆侀煩銆佸痉銆佹硶鐣岄潰绉掑垏銆俓n- 鏅鸿兘鍖栨悳绱笌鍒嗙被锛氭敮鎸佸疄鏃舵悳绱㈠鍏凤紝骞舵寜娓告垙鍘熺敓绫诲埆鑷姩褰掔被鎶樺彔銆俓n- 楂樼骇娓呭崟瀵煎嚭锛氭敮鎸佸鍑?Teamcraft 瀵煎叆鏂囨湰鎴栧璇█ CSV 璐墿娓呭崟銆俓n\n涓ユ澹版槑锛氭湰鎻掍欢瀹屽叏鍏嶈垂寮€婧愶紒涓ョ鍊掑崠锛?,
+  "Description": "AlmondHousing (杏仁房屋工具) 是基于 DisPlace 深度重构的 FF14 房屋装修增强插件。\n\n核心功能：\n- 全球首发 6 国语言支持：中（简/繁）、英、日、韩、德、法界面秒切。\n- 智能化搜索与分类：支持实时搜索家具，并按游戏原生类别自动归类折叠。\n- 高级清单导出：支持导出 Teamcraft 导入文本或多语言 CSV 购物清单。\n\n严正声明：本插件完全免费开源！严禁倒卖！",
   "ApplicableVersion": "any",
   "DalamudApiLevel": 15,
   "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondHousing/master/icon.png",
-  "Punchline": "璁╂埧灞嬭淇笌璺ㄥ浗鍒嗕韩鍙樺緱鏃犳瘮绠€鍗?,
+  "Punchline": "让房屋装修与跨国分享变得无比简单",
   "Tags": [
     "makeplace",
     "housing",
     "furniture",
     "almondcookie",
     "almondhousing",
-    "鎴垮眿瑁呬慨",
-    "澶氳瑷€",
+    "房屋装修",
+    "多语言",
     "layout",
     "localization"
   ],
@@ -28,4 +28,3 @@
   "LoadBehavior": 0,
   "RepoUrl": "https://github.com/hyirax/AlmondPlugins"
 }
-
