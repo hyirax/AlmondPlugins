@@ -84,7 +84,7 @@ namespace AlmondHousing.Gui
 
             if (_materialCache == null || _materialCacheDirty)
             {
-                RefreshMaterialCache(Dalamud.Game.ClientLanguage.English);
+                RefreshMaterialCache(DalamudApi.ClientState.ClientLanguage);
             }
 
             var itemSheet = DalamudApi.DataManager.GetExcelSheet<Item>();

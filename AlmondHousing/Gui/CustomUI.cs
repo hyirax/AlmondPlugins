@@ -115,23 +115,37 @@ namespace AlmondHousing.Gui
             progress = Math.Abs(progress - target) < 0.001f ? target : progress + (target - progress) * delta;
             _headerAnim[id] = progress;
 
-            // Draw arrow: rotates from right (closed) to down (open)
-            float arrowAngle = progress * (float)Math.PI * 0.5f;
+            var pos = ImGui.GetCursorScreenPos();
             var drawList = ImGui.GetWindowDrawList();
-            var arrowCenter = ImGui.GetCursorScreenPos() + new Vector2(14f, 14f);
+            float headerHeight = 28f;
+            float headerWidth = ImGui.GetContentRegionAvail().X;
+
+            // Header background with hover effect
+            bool hovered = ImGui.IsMouseHoveringRect(pos, pos + new Vector2(headerWidth, headerHeight));
+            bool clicked = hovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+            if (clicked) open = !open;
+            float bgAlpha = hovered ? 0.10f : 0.04f;
+            drawList.AddRectFilled(pos, pos + new Vector2(headerWidth, headerHeight),
+                ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, bgAlpha)), 4f);
+
+            // Arrow: rotates from right (closed) to down (open)
+            float arrowAngle = progress * (float)Math.PI * 0.5f;
+            var arrowCenter = pos + new Vector2(14f, headerHeight / 2);
             float aLen = 5f;
             float cosA = (float)Math.Cos(arrowAngle);
             float sinA = (float)Math.Sin(arrowAngle);
             Vector2 Rot(Vector2 v) => new(v.X * cosA - v.Y * sinA, v.X * sinA + v.Y * cosA);
-            drawList.AddTriangleFilled(
-                arrowCenter + Rot(new Vector2(aLen, 0)),
+            var arrowU32 = ImGui.ColorConvertFloat4ToU32(new Vector4(0.75f, 0.75f, 0.75f, 1f));
+            drawList.AddTriangleFilled(arrowCenter + Rot(new Vector2(aLen, 0)),
                 arrowCenter + Rot(new Vector2(-aLen, -aLen)),
-                arrowCenter + Rot(new Vector2(-aLen, aLen)),
-                ImGui.ColorConvertFloat4ToU32(new Vector4(0.75f, 0.75f, 0.75f, 1f)));
+                arrowCenter + Rot(new Vector2(-aLen, aLen)), arrowU32);
 
-            ImGui.SetCursorPosX(26f);
-            if (ImGui.Selectable(label + "##" + id, open ? true : false, ImGuiSelectableFlags.None, new Vector2(0, 28f)))
-                open = !open;
+            // Label
+            drawList.AddText(pos + new Vector2(26f, 5f),
+                ImGui.ColorConvertFloat4ToU32(new Vector4(0.9f, 0.9f, 0.9f, 1f)), label);
+
+            // Reserve space in layout
+            ImGui.Dummy(new Vector2(headerWidth, headerHeight + 2f));
 
             return progress > 0.99f;
         }
