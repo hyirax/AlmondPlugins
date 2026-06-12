@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AlmondHousing")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.1.0+c6c1ff87a90f38adfc661ed95bfa99dda24313ad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.1.0+db41c56e97197ec41c983625b0826ea4712d9405")]
 [assembly: System.Reflection.AssemblyProductAttribute("AlmondHousing")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AlmondHousing")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.1.1.0")]
