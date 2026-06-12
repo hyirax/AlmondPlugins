@@ -1,32 +1,24 @@
-﻿[
+[
   {
     "Author": "AlmondCookie",
     "Name": "AlmondHousing",
     "InternalName": "AlmondHousing",
-    "AssemblyVersion": "1.1.0.0",
+    "AssemblyVersion": "1.1.1.0",
     "Punchline": "FFXIV Housing Tool | FF14 房屋装修工具 /almond",
     "Description": "A housing enhancement tool for FFXIV, born from community exploration. Supports material audit, layout import/export, and multi-language.\n\n专注 FF14 房屋装修场景的增强工具，脱胎于社区前辈项目的探索与积累。支持物料盘点、图纸导入导出、7 种语言界面。\n\n/almond to open panel | 输入 /almond 打开面板",
     "ApplicableVersion": "any",
-    "RepoUrl": "https://github.com/hyirax/AlmondHousing",
+    "RepoUrl": "https://github.com/hyirax/AlmondPlugins",
     "Tags": [
-      "makeplace",
-      "housing",
-      "furniture",
-      "almondcookie",
-      "almondhousing",
-      "layout",
-      "decoration",
-      "utility",
-      "export",
-      "teamcraft"
+      "makeplace", "housing", "furniture", "almondcookie",
+      "almondhousing", "layout", "decoration", "utility",
+      "export", "teamcraft"
     ],
-    "CategoryTags": [
-      "Utility"
-    ],
+    "CategoryTags": ["Utility"],
     "DalamudApiLevel": 15,
-    "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondHousing/master/icon.png",
-    "DownloadLinkInstall": "https://github.com/hyirax/AlmondHousing/releases/latest/download/AlmondHousing.zip",
-    "DownloadLinkTesting": "https://github.com/hyirax/AlmondHousing/releases/latest/download/AlmondHousing.zip",
-    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondHousing/releases/latest/download/AlmondHousing.zip"
+    "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondHousing/main/icon.png",
+    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/latest/download/AlmondHousing.zip",
+    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/latest/download/AlmondHousing.zip",
+    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/latest/download/AlmondHousing.zip"
   }
 ]
+
