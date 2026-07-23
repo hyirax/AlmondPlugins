@@ -1,0 +1,23 @@
+[
+  {
+    "Author": "AlmondCookie",
+    "Name": "AlmondHousing",
+    "InternalName": "AlmondHousing",
+    "AssemblyVersion": "1.1.4.0",
+    "Punchline": "杏仁造境 · FFXIV Housing Atelier /almond",
+    "Description": "AlmondHousing · Housing Atelier — a focused FFXIV housing tool for furniture search, layout management, material audit, protected sharing, and advanced placement controls.\n\nAlmondHousing · 杏仁造境，专注 FF14 房屋装修场景，提供家具检索、布局管理、物料盘点、加密分享与高级摆放调节。\n\n/almond to open panel | 输入 /almond 打开面板",
+    "ApplicableVersion": "any",
+    "RepoUrl": "https://github.com/hyirax/AlmondPlugins",
+    "Tags": [
+      "makeplace", "housing", "furniture", "almondcookie",
+      "almondhousing", "layout", "decoration", "utility",
+      "export", "teamcraft"
+    ],
+    "CategoryTags": ["Utility"],
+    "DalamudApiLevel": 15,
+    "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondPlugins/main/icons/AlmondHousing.png",
+    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondHousing-v1.1.4/AlmondHousing-1.1.4.zip",
+    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondHousing-v1.1.4/AlmondHousing-1.1.4.zip",
+    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondHousing-v1.1.4/AlmondHousing-1.1.4.zip"
+  }
+]
