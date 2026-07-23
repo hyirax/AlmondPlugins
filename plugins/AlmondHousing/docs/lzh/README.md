@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../icons/AlmondHousing.png" width="96" alt="AlmondHousing">
+  <img src="../../../../icons/AlmondHousing.png" width="96" alt="AlmondHousing">
 </p>
 
 <h1 align="center">AlmondHousing · 杏仁造境</h1>
