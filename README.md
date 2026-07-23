@@ -32,6 +32,16 @@ An FFXIV housing tool for furniture search, layout management, material auditing
 
 [简体中文](plugins/AlmondHousing/README.md) · [繁體中文](plugins/AlmondHousing/docs/zh_TW/README.md) · [文言文](plugins/AlmondHousing/docs/lzh/README.md) · [English](plugins/AlmondHousing/docs/en/README.md) · [日本語](plugins/AlmondHousing/docs/ja/README.md) · [한국어](plugins/AlmondHousing/docs/ko/README.md) · [Deutsch](plugins/AlmondHousing/docs/de/README.md) · [Français](plugins/AlmondHousing/docs/fr/README.md) · [Русский](plugins/AlmondHousing/docs/ru/README.md)
 
+### AlmondZoom
+
+轻量的 FFXIV 镜头工具，提供视距、视野、相机高度、镜头碰撞和平滑过渡调节。
+
+A lightweight FFXIV camera tool for zoom distance, FOV, camera height, collision control, and smooth transitions.
+
+| 版本 / Version | 命令 / Command | 下载 / Download |
+| --- | --- | --- |
+| 1.0.2 | `/az` | [AlmondZoom 1.0.2](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondZoom-v1.0.2) |
+
 ## 发布说明 / Distribution
 
 本仓库只公开插件目录、说明、图标与编译后的发布包，不包含插件源码。插件本体免费，禁止转售或设置付费下载。

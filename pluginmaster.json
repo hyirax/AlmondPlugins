@@ -19,5 +19,24 @@
     "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondHousing-v1.1.4/AlmondHousing-1.1.4.zip",
     "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondHousing-v1.1.4/AlmondHousing-1.1.4.zip",
     "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondHousing-v1.1.4/AlmondHousing-1.1.4.zip"
+  },
+  {
+    "Author": "AlmondCookie",
+    "Name": "AlmondZoom",
+    "InternalName": "AlmondZoom",
+    "AssemblyVersion": "1.0.2.0",
+    "Punchline": "镜头视距与视野控制 · Camera Zoom & FOV",
+    "Description": "AlmondZoom 是一款轻量的 FFXIV 镜头工具，支持视距、FOV、相机高度、镜头碰撞和平滑过渡调节。\n\nA lightweight FFXIV camera tool for zoom distance, FOV, camera height, collision control, and smooth transitions.\n\n/az to open settings | 输入 /az 打开设置",
+    "ApplicableVersion": "any",
+    "RepoUrl": "https://github.com/hyirax/AlmondPlugins",
+    "Tags": [
+      "camera", "zoom", "fov", "utility", "almondcookie", "almondzoom"
+    ],
+    "CategoryTags": ["Utility"],
+    "DalamudApiLevel": 15,
+    "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondPlugins/main/icons/AlmondZoom.png",
+    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.2/AlmondZoom-1.0.2.zip",
+    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.2/AlmondZoom-1.0.2.zip",
+    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.2/AlmondZoom-1.0.2.zip"
   }
 ]
