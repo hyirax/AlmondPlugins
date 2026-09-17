@@ -28,7 +28,7 @@ An FFXIV housing tool for furniture search, layout management, material auditing
 
 | 版本 / Version | 命令 / Command | 下载 / Download |
 | --- | --- | --- |
-| 1.1.4 | `/almond` | [AlmondHousing 1.1.4](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondHousing-v1.1.4) |
+| 1.1.5 | `/almond` | [AlmondHousing 1.1.5](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondHousing-v1.1.5) |
 
 [简体中文](plugins/AlmondHousing/README.md) · [繁體中文](plugins/AlmondHousing/docs/zh_TW/README.md) · [文言文](plugins/AlmondHousing/docs/lzh/README.md) · [English](plugins/AlmondHousing/docs/en/README.md) · [日本語](plugins/AlmondHousing/docs/ja/README.md) · [한국어](plugins/AlmondHousing/docs/ko/README.md) · [Deutsch](plugins/AlmondHousing/docs/de/README.md) · [Français](plugins/AlmondHousing/docs/fr/README.md) · [Русский](plugins/AlmondHousing/docs/ru/README.md)
 
