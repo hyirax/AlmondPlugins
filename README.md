@@ -28,7 +28,7 @@ An FFXIV housing tool for furniture search, layout management, material auditing
 
 | 版本 / Version | 命令 / Command | 下载 / Download |
 | --- | --- | --- |
-| 1.1.5 | `/almond` | [AlmondHousing 1.1.5](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondHousing-v1.1.5) |
+| 1.1.6 | `/almond` | [AlmondHousing 1.1.6](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondHousing-v1.1.6) |
 
 [简体中文](plugins/AlmondHousing/README.md) · [繁體中文](plugins/AlmondHousing/docs/zh_TW/README.md) · [文言文](plugins/AlmondHousing/docs/lzh/README.md) · [English](plugins/AlmondHousing/docs/en/README.md) · [日本語](plugins/AlmondHousing/docs/ja/README.md) · [한국어](plugins/AlmondHousing/docs/ko/README.md) · [Deutsch](plugins/AlmondHousing/docs/de/README.md) · [Français](plugins/AlmondHousing/docs/fr/README.md) · [Русский](plugins/AlmondHousing/docs/ru/README.md)
 
@@ -41,6 +41,18 @@ A lightweight FFXIV camera tool for zoom distance, FOV, camera height, collision
 | 版本 / Version | 命令 / Command | 下载 / Download |
 | --- | --- | --- |
 | 1.0.2 | `/az` | [AlmondZoom 1.0.2](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondZoom-v1.0.2) |
+
+### BossMod Reborn (CN) · 自用简体中文汉化版
+
+基于官方开源项目 `FFXIV-CombatReborn/BossmodReborn` 打包的自用简体中文（`zh-CN`）汉化分支，包含完整界面、设置项、全版本副本/Boss/FATE/任务名称、职业循环与战斗机制提示汉化，并默认开启 `WIP` Boss 模块加载以便查看技能雷达提示。
+
+Personal Simplified Chinese (`zh-CN`) localization build based on upstream `FFXIV-CombatReborn/BossmodReborn`, featuring localized UI, settings, duties/bosses/FATEs, autorotation and combat hints, with `WIP` boss modules enabled by default.
+
+| 版本 / Version | 命令 / Command | 下载 / Download |
+| --- | --- | --- |
+| 7.4.2611.1521 | `/bmr` | [BossMod Reborn (CN) 7.4.2611.1521](https://github.com/hyirax/AlmondPlugins/releases/tag/BossModReborn-v7.4.2611.1521) |
+
+[说明文档](plugins/BossModReborn/README.md) · [BSD-3-Clause LICENSE](plugins/BossModReborn/LICENSE)
 
 ## 发布说明 / Distribution
 
