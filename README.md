@@ -42,6 +42,18 @@ A lightweight FFXIV camera tool for zoom distance, FOV, camera height, collision
 | --- | --- | --- |
 | 1.0.2 | `/az` | [AlmondZoom 1.0.2](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondZoom-v1.0.2) |
 
+### AlmondChatTranslated · 杏仁秒译
+
+基于 DeepSeek API 的 FFXIV 极速实时聊天与招募板翻译插件，内置本地语言预检、上下文缓存与暗金三栏界面。
+
+A fast FFXIV real-time chat and Party Finder translator powered by DeepSeek API, featuring local language pre-filtering, prompt caching, and a clean Almond UI.
+
+| 版本 / Version | 命令 / Command | 下载 / Download |
+| --- | --- | --- |
+| 1.0.0 | `/act` | [AlmondChatTranslated 1.0.0](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondChatTranslated-v1.0.0) |
+
+[说明文档](plugins/AlmondChatTranslated/README.md) · [AGPL-3.0 LICENSE](plugins/AlmondChatTranslated/LICENSE.md) · [第三方声明](plugins/AlmondChatTranslated/THIRD-PARTY-NOTICES.txt)
+
 ### BossMod Reborn (CN) · 自用简体中文汉化版
 
 基于官方开源项目 `FFXIV-CombatReborn/BossmodReborn` 打包的自用简体中文（`zh-CN`）汉化分支，包含完整界面、设置项、全版本副本/Boss/FATE/任务名称、职业循环与战斗机制提示汉化，并默认开启 `WIP` Boss 模块加载以便查看技能雷达提示。

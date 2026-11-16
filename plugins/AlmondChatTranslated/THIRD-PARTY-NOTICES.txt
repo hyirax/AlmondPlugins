@@ -1,0 +1,6 @@
+AlmondChatTranslated is derived from ChatTranslated by kelvin124124
+(https://github.com/kelvin124124/ChatTranslated), licensed under AGPL-3.0-or-later.
+
+GlyphFolder.FoldTable.cs includes character folding pairs derived from OpenCC
+(https://github.com/BYVoid/OpenCC), licensed under the Apache License, Version 2.0,
+with character frequency filtering based on Jun Da's Modern Chinese Character Frequency List.
