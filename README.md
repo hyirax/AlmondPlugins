@@ -50,7 +50,7 @@ Personal Simplified Chinese (`zh-CN`) localization build based on upstream `FFXI
 
 | 版本 / Version | 命令 / Command | 下载 / Download |
 | --- | --- | --- |
-| 7.4.2611.1521 | `/bmr` | [BossMod Reborn (CN) 7.4.2611.1521](https://github.com/hyirax/AlmondPlugins/releases/tag/BossModReborn-v7.4.2611.1521) |
+| 7.4.2611.1622 | `/bmr` | [BossMod Reborn (CN) 7.4.2611.1622](https://github.com/hyirax/AlmondPlugins/releases/tag/BossModReborn-v7.4.2611.1622) |
 
 [说明文档](plugins/BossModReborn/README.md) · [BSD-3-Clause LICENSE](plugins/BossModReborn/LICENSE)
 
