@@ -86,9 +86,9 @@
     "Author": "FFXIV-CombatReborn / AlmondCookie (CN)",
     "Name": "BossMod Reborn (CN)",
     "InternalName": "BossModReborn",
-    "AssemblyVersion": "7.4.2611.1622",
-    "TestingAssemblyVersion": "7.4.2611.1622",
-    "Changelog": "同步上游 PR #1401（任务搜索器新增 BMR 支持状态标记、7.x 四人本优化）；修复老配置升级后自动默认开启 WIP Boss 模块加载并适配中文任务搜索器。\n\nSync upstream PR #1401 (Duty Finder BMR indicator & DT dungeon cleanup), migrate existing configs to WIP default, and update zh-CN localization.",
+    "AssemblyVersion": "7.5.8.6",
+    "TestingAssemblyVersion": "7.5.8.6",
+    "Changelog": "7.5.8.6-cn：版本号统一规范为 <官方版本号>-cn（基于上游 7.5.8.6），设置窗口同步显示 v7.5.8.6-cn。\n\n7.5.8.6-cn: Align versioning with upstream 7.5.8.6 (<upstream>-cn).",
     "Punchline": "BossMod Reborn 自用简体中文汉化版 · 副本雷达与机制提示",
     "Description": "基于 FFXIV-CombatReborn/BossmodReborn 构建的自用简体中文全量汉化版本：包含插件界面、配置项、全版本副本/Boss/FATE/任务名称、职业循环与战斗机制提示汉化，并默认开启 WIP Boss 模块加载，方便在无完整时间轴的副本中直接查看技能范围与躲避提示。\n\n遵循上游 BSD-3-Clause 协议分发二进制产物（不含源码），仅限个人自用与亲友分享，插件完全免费，禁止转售或付费下载。\n\nPersonal Simplified Chinese (zh-CN) localization build of BossmodReborn with WIP boss modules enabled by default for radar mechanic hints. Binary-only distribution under BSD-3-Clause.\n\n/bmr to open settings | 输入 /bmr 打开设置",
     "ApplicableVersion": "any",
@@ -118,9 +118,9 @@
     "IsHide": false,
     "IsTestingExclusive": false,
     "DownloadCount": 0,
-    "LastUpdate": 1794838777,
-    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/BossModReborn-v7.4.2611.1622/BossModReborn-7.4.2611.1622.zip",
-    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/BossModReborn-v7.4.2611.1622/BossModReborn-7.4.2611.1622.zip",
-    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/BossModReborn-v7.4.2611.1622/BossModReborn-7.4.2611.1622.zip"
+    "LastUpdate": 1795032179,
+    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/BossModReborn-v7.5.8.6-cn/BossModReborn-7.5.8.6-cn.zip",
+    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/BossModReborn-v7.5.8.6-cn/BossModReborn-7.5.8.6-cn.zip",
+    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/BossModReborn-v7.5.8.6-cn/BossModReborn-7.5.8.6-cn.zip"
   }
 ]
