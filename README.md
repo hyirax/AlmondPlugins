@@ -40,7 +40,7 @@ A lightweight FFXIV camera tool for zoom distance, FOV, camera height, collision
 
 | 版本 / Version | 命令 / Command | 下载 / Download |
 | --- | --- | --- |
-| 1.0.2 | `/az` | [AlmondZoom 1.0.2](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondZoom-v1.0.2) |
+| 1.0.3 | `/az` | [AlmondZoom 1.0.3](https://github.com/hyirax/AlmondPlugins/releases/tag/AlmondZoom-v1.0.3) |
 
 ### AlmondChatTranslated · 杏仁秒译
 

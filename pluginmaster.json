@@ -34,7 +34,8 @@
     "Author": "AlmondCookie",
     "Name": "AlmondZoom",
     "InternalName": "AlmondZoom",
-    "AssemblyVersion": "1.0.2.0",
+    "AssemblyVersion": "1.0.3.0",
+    "Changelog": "修复镜头 Hook 签名导致的崩溃问题，迁移至 FFXIVClientStructs 官方结构并加强补丁校验与界面交互优化。\n\nFix camera zoom hook crash, migrate to FFXIVClientStructs definitions, harden memory patching, and improve settings UI.",
     "Punchline": "镜头视距与视野控制 · Camera Zoom & FOV",
     "Description": "AlmondZoom 是一款轻量的 FFXIV 镜头工具，支持视距、FOV、相机高度、镜头碰撞和平滑过渡调节。\n\nA lightweight FFXIV camera tool for zoom distance, FOV, camera height, collision control, and smooth transitions.\n\n/az to open settings | 输入 /az 打开设置",
     "ApplicableVersion": "any",
@@ -52,9 +53,9 @@
     ],
     "DalamudApiLevel": 15,
     "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondPlugins/main/icons/AlmondZoom.png",
-    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.2/AlmondZoom-1.0.2.zip",
-    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.2/AlmondZoom-1.0.2.zip",
-    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.2/AlmondZoom-1.0.2.zip"
+    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.3/AlmondZoom-1.0.3.zip",
+    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.3/AlmondZoom-1.0.3.zip",
+    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondZoom-v1.0.3/AlmondZoom-1.0.3.zip"
   },
   {
     "Author": "AlmondCookie",
