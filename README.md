@@ -66,6 +66,18 @@ Personal Simplified Chinese (`zh-CN`) localization build based on upstream `FFXI
 
 [说明文档](plugins/BossModReborn/README.md) · [BSD-3-Clause LICENSE](plugins/BossModReborn/LICENSE)
 
+### Rotation Solver Reborn (CN) · 自用简体中文汉化版
+
+基于官方开源项目 `FFXIV-CombatReborn/RotationSolverReborn` 打包的自用简体中文（`zh-CN`）全量汉化分支，覆盖插件设置主窗口、悬浮控制台、技能时间轴、首次启动新手教程、全部全局配置及各职业/特殊探索副本循环，内置国服官方技能与状态名称词库并支持中英实时切换与跨服 CJK 字体兼容。
+
+Personal Simplified Chinese (`zh-CN`) localization build based on upstream `FFXIV-CombatReborn/RotationSolverReborn`, featuring full UI, settings, job/duty rotation, official CN Lumina game data, runtime CN/EN toggle, and cross-client CJK font support.
+
+| 版本 / Version | 命令 / Command | 下载 / Download |
+| --- | --- | --- |
+| 7.5.8.7-cn | `/rotation` | [Rotation Solver Reborn (CN) 7.5.8.7-cn](https://github.com/hyirax/AlmondPlugins/releases/tag/RotationSolver-v7.5.8.7-cn) |
+
+[说明文档](plugins/RotationSolver/README.md) · [GPL-3.0 COPYING](plugins/RotationSolver/COPYING) · [LGPL-3.0 COPYING.LESSER](plugins/RotationSolver/COPYING.LESSER)
+
 ## 发布说明 / Distribution
 
 本仓库只公开插件目录、说明、图标与编译后的发布包，不包含插件源码。插件本体免费，禁止转售或设置付费下载。
