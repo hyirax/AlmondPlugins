@@ -61,10 +61,10 @@
     "Author": "AlmondCookie",
     "Name": "AlmondChatTranslated",
     "InternalName": "AlmondChatTranslated",
-    "AssemblyVersion": "1.0.0.0",
-    "Changelog": "首个整合发布版本 1.0.0：DeepSeek API 极速直连翻译、本地零网络语言预检、暗金三栏界面与招募板翻译。\n\nInitial 1.0.0 release: DeepSeek-exclusive chat translation, local language pre-filtering, Almond UI, and Party Finder translation.",
+    "AssemblyVersion": "1.1.0.0",
+    "Changelog": "1.1.0：新增中文发话翻译（支持免 /tr 在勾选频道直接打中文自动译为目标语言直发、句首 ! 跳过翻译发原文，以及 /tr /trp /trs /tra /trsh /trfc /trr 指令与 /ok 预览双模式）；内置 FF14 中→日/英术语库与 0ms 高频短语直出；优化直连绕过系统代理、自定义模型兼容与并发熔断稳定性。\n\n1.1.0: Added outgoing FFXIV chat translation (command-free auto-send per channel with '!' raw bypass, plus /tr commands and Direct / Preview modes), built-in FFXIV terminology & 0ms instant phrases, system-proxy bypass, custom model support, and burst-safe circuit breaker.",
     "Punchline": "DeepSeek 驱动的轻量实时聊天翻译 · Fast DeepSeek In-Game Chat Translator",
-    "Description": "AlmondChatTranslated 基于 kelvin124124/ChatTranslated 继续开发，移除冗余慢速端口，专为 DeepSeek API 深度优化：零外部语言检测延迟、极速并发与上下文缓存、精简美观的暗金界面。\n\nContinued development of ChatTranslated powered exclusively by DeepSeek API with zero-network language pre-filtering, prompt-cached fast translation, and a clean Almond UI.\n\n/act 打开主面板 | /act config 打开配置",
+    "Description": "AlmondChatTranslated 基于 kelvin124124/ChatTranslated 继续开发，专为 DeepSeek API 深度优化：零外部语言检测延迟、极速并发直连与上下文缓存、中文发话秒翻（支持免 /tr 频道自动直发与 /tr 指令双模式，内置 FF14 中日英术语优化）与招募板右键翻译。\n\nContinued development of ChatTranslated powered exclusively by DeepSeek API with zero-network language pre-filtering, fast direct connection, outgoing FFXIV terminology translation (command-free auto-send + /tr commands), and Party Finder translation.\n\n/act 打开主面板 | /tr 发话翻译 | /tr auto 免指令直发开关",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/hyirax/AlmondPlugins",
     "Tags": [
@@ -78,10 +78,10 @@
     ],
     "DalamudApiLevel": 15,
     "IconUrl": "https://raw.githubusercontent.com/hyirax/AlmondPlugins/main/icons/AlmondChatTranslated.png",
-    "LastUpdate": 1794852768,
-    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondChatTranslated-v1.0.0/AlmondChatTranslated-1.0.0.zip",
-    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondChatTranslated-v1.0.0/AlmondChatTranslated-1.0.0.zip",
-    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondChatTranslated-v1.0.0/AlmondChatTranslated-1.0.0.zip"
+    "LastUpdate": 1795457676,
+    "DownloadLinkInstall": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondChatTranslated-v1.1.0/AlmondChatTranslated-1.1.0.zip",
+    "DownloadLinkTesting": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondChatTranslated-v1.1.0/AlmondChatTranslated-1.1.0.zip",
+    "DownloadLinkUpdate": "https://github.com/hyirax/AlmondPlugins/releases/download/AlmondChatTranslated-v1.1.0/AlmondChatTranslated-1.1.0.zip"
   },
   {
     "Author": "FFXIV-CombatReborn / AlmondCookie (CN)",
