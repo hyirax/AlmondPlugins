@@ -74,7 +74,7 @@ Personal Simplified Chinese (`zh-CN`) localization build based on upstream `FFXI
 
 | 版本 / Version | 命令 / Command | 下载 / Download |
 | --- | --- | --- |
-| 7.5.8.7-cn | `/rotation` | [Rotation Solver Reborn (CN) 7.5.8.7-cn](https://github.com/hyirax/AlmondPlugins/releases/tag/RotationSolver-v7.5.8.7-cn) |
+| 7.5.8.9-cn | `/rotation` | [Rotation Solver Reborn (CN) 7.5.8.9-cn](https://github.com/hyirax/AlmondPlugins/releases/tag/RotationSolver-v7.5.8.9-cn) |
 
 [说明文档](plugins/RotationSolver/README.md) · [GPL-3.0 COPYING](plugins/RotationSolver/COPYING) · [LGPL-3.0 COPYING.LESSER](plugins/RotationSolver/COPYING.LESSER)
 
